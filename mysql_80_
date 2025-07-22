@@ -42,19 +42,20 @@ MySQL :: 정형 데이터를 저장하는 데이터베이스
 -- 글자 사이에 간격이 있어도 ;까지를 한 줄의 명령어로 인식
 
 @@@ 반드시 기억해주세요.	@@@		워크벤치 프로그램 실행시 마다 초기화되는 명령어 실행해야 하므로 외워야 함
--- show databases;			모든 데이터베이스 조회									1. 가장 먼저 데이터베이스 리스트를 불러옴		(번개 버튼 또는 컨트롤+엔터)
--- use hrdb2019;			사용할 데이터베이스 오픈									2. 그 다음 사용할 데이터베이스를 열기		(번개 버튼 또는 컨트롤+엔터)
--- select database();		데이터베이스 선택, 여기까지 진행해야 테이블을 사용할 수 있음		3. 그 다음 데이터베이스 선택				(번개 버튼 또는 컨트롤+엔터)
--- show tables;				데이터베이스의 모든 테이블 조회								4. 그 다음 테이블 조회					(번개 버튼 또는 컨트롤+엔터)
+-- show databases;			모든 데이터베이스 조회									1. 가장 먼저 데이터베이스 리스트를 불러옴		(1. 번개 버튼 또는 컨트롤+엔터)
+-- use hrdb2019;			사용할 데이터베이스 오픈									2. 그 다음 사용할 데이터베이스를 열기		(2. 번개 버튼 또는 컨트롤+엔터)
+-- select database();		데이터베이스 선택, 여기까지 진행해야 테이블을 사용할 수 있음		3. 그 다음 데이터베이스 선택				(3. 번개 버튼 또는 컨트롤+엔터)
+-- show tables;				데이터베이스의 모든 테이블 조회								4. 그 다음 테이블 조회					(4. 번개 버튼 또는 컨트롤+엔터)
 
+===================================================================================================================================================
+section 02. 실습
 ===================================================================================================================================================
 */
   
-/* 반드시 기억해주세요. */	-- 워크벤치 프로그램 실행시 마다 초기화되는 명령어 실행해야하므로 외워야 함
-show databases;			-- 모든 데이터베이스 조회										1. 가장 먼저 데이터베이스 리스트를 불러옴		(번개 버튼 또는 컨트롤+엔터)
-use hrdb2019;			-- 사용할 데이터베이스 오픈									2. 그 다음 사용할 데이터베이스를 열기		(번개 버튼 또는 컨트롤+엔터)
-select database();		-- 데이터베이스 선택, 여기까지 진행해야 테이블을 사용할 수 있음		3. 그 다음 데이터베이스 선택				(번개 버튼 또는 컨트롤+엔터)
-show tables;			-- 데이터베이스의 모든 테이블 조회								4. 그 다음 테이블 조회					(번개 버튼 또는 컨트롤+엔터)
+show databases;			-- 모든 데이터베이스 조회
+use hrdb2019;			-- 사용할 데이터베이스 오픈
+select database();		-- 데이터베이스 선택, 여기까지 진행해야 테이블을 사용할 수 있음
+show tables;			-- 데이터베이스의 모든 테이블 조회
 
 use market_db;
 select database();
@@ -109,7 +110,10 @@ DESC EMPLOYEE;
 SELECT EMP_ID, EMP_NAME, DEPT_ID, PHONE, EMAIL, SALARY, SALARY*10 AS BONUS
 FROM EMPLOYEE;
 
--- 현재 날짜를 조회 : CURDATE() / 임시르 사용하는 테스트용 테이블을 생성
+/*************************************************************************************************************************************************
+	CURDATE() : 현재 날짜 조회
+    임시로 사용하는 테스트용 테이블을 생성
+**************************************************************************************************************************************************/
 -- SELECT CURDATE() FROM DUAL;
 SELECT CURDATE() AS DATE FROM DUAL;
 
@@ -120,14 +124,82 @@ SELECT CURDATE() AS DATE FROM DUAL;
 			WHERE [조건절];
 **************************************************************************************************************************************************/
 -- 정주고 사원의 정보를 조회
-SELECT * FROM EMPLOYEE;
 -- SELECT * FROM EMPLOYEE WHERE EMP_NAME = 정주고; -- 에러 발생 사유는 CHAR가 문자열이기 때문에 감싸줘야함
 SELECT * FROM EMPLOYEE WHERE EMP_NAME = "정주고";
 SELECT * FROM EMPLOYEE WHERE EMP_NAME = '정주고'; -- 싱글 쿼테이션 ''와 더블 쿼테이션 "" 모두 사용 가능
 
 -- SYS 부서에 속한 모든 사원을 조회
-SELECT * FROM EMPLOYEE WHERE DEPT_ID = "SYS";
-SELECT * FROM EMPLOYEE WHERE DEPT_ID = "sys"; -- 오라클은 대소문자 정확해야 동작, MySQL은 대소문자 모두 가능
+SELECT * FROM EMPLOYEE WHERE DEPT_ID = 'SYS';
+SELECT * FROM EMPLOYEE WHERE DEPT_ID = 'sys'; -- 오라클은 대소문자 정확해야 동작, MySQL은 대소문자 모두 가능
+
+-- 사번이 S0005인 사원의 사원명, 성별, 입사일, 부서아이디, 이메일, 급여를 조회
+SELECT EMP_NAME, GENDER, HIRE_DATE, DEPT_ID, EMAIL, SALARY
+FROM EMPLOYEE WHERE EMP_ID = 'S0005';
+
+-- SYS 부서에 속한 모든 사원들을 조회, 단 출력되는 EMP_ID 컬럼은 '사원번호' 별칭으로 조회
+SELECT * FROM EMPLOYEE;
+-- SELECT EMP_ID AS '사원번호', * FROM EMPLOYEE WHERE DEPT_ID = "SYS"; -- 동작 안됨
+SELECT EMP_ID AS '사원번호', EMP_NAME, ENG_NAME, GENDER, HIRE_DATE, SALARY
+FROM EMPLOYEE WHERE DEPT_ID = 'SYS';
+
+-- EMP_NAME '사원명' 별칭 수정
+SELECT EMP_ID AS '사원번호', EMP_NAME AS '사원명', ENG_NAME, GENDER, HIRE_DATE, SALARY
+FROM EMPLOYEE WHERE DEPT_ID = 'SYS';
+
+-- WHERE 조건절 컬럼으로 별칭을 사용할 수 있을까요?
+-- 사원명이 홍길동인 사원을 별칭으로 조회? ::: WHERE 조건절에서 별칭을 컬럼명으로 사용할 수 없음
+SELECT EMP_ID AS '사원번호', EMP_NAME AS '사원명', ENG_NAME, GENDER, HIRE_DATE, SALARY
+FROM EMPLOYEE WHERE 사원명 = '홍길동';
+-- SELECT는 가장 마지막에 출력되는 결과값인 컬럼 리스트이기 때문에 별칭 조건절은 사용이 불가
+
+-- 전략기획 부서의 모든 사원들의 사번, 사원명, 입사일, 급여를 조회
+SELECT EMP_ID, EMP_NAME, HIRE_DATE, SALARY FROM EMPLOYEE WHERE DEPT_ID = 'STG';
+
+-- 입사일이 2014년 8월 1일인 사원들을 조회
+SELECT * FROM EMPLOYEE WHERE HIRE_DATE = '2014-08-01'; -- DATE 타입은 표현은 문자열처럼, 처리는 숫자처럼
+
+-- 급여가 5000인 사원들을 조회
+SELECT * FROM EMPLOYEE WHERE SALARY = '5000';
+
+-- 성별이 남자인 사원들을 조회
+SELECT * FROM EMPLOYEE WHERE GENDER = 'M';
+
+-- 성별이 여자인 사원들을 조회
+SELECT * FROM EMPLOYEE WHERE GENDER = 'F';
+
+/*************************************************************************************************************************************************
+	NULL : 아직 정의되지 않은 미지수
+	숫자에서는 가장 큰 수로 인식, 논리적인 의미를 포함하고 있으므로 등호(=)로는 검색 불가, IS 키워드와 함께 사용 가능
+	값이 없다는 뜻이 아니라 아직 미정이라는 뜻, 0은 0이지만, NULL은 미지정의 숫자를 의미
+	가장 큰 수가 들어갈 가능성이 있어 가장 큰 수, 미지수로 정의함, 리스트 정렬시 가장 마지막에 나옴
+**************************************************************************************************************************************************/
+-- 급여가 NULL인 값을 가진 사원들을 조회
+-- SELECT * FROM EMPLOYEE WHERE SALARY = NULL; -- 조회 안됨
+SELECT * FROM EMPLOYEE WHERE SALARY IS NULL;
+
+-- 영어이름이 정해지지 않은 사원들을 조회
+SELECT * FROM EMPLOYEE WHERE ENG_NAME IS NULL;
+
+-- 퇴사하지 않은 사람들을 조회
+SELECT * FROM EMPLOYEE WHERE RETIRE_DATE IS NULL;
+
+-- 퇴사하지 않은 사람들의 보너스 컬럼(급여*20%)을 추가하여 조회, 컬럼명은 BONUS / *(아스타)는 지양
+SELECT EMP_ID, EMP_NAME, ENG_NAME, GENDER, HIRE_DATE, RETIRE_DATE, DEPT_ID, PHONE, EMAIL, SALARY, SALARY*20 AS BONUS FROM EMPLOYEE WHERE RETIRE_DATE IS NULL;
+
+/*************************************************************************************************************************************************
+	IS NOT
+**************************************************************************************************************************************************/
+-- 퇴사한 사원들의 사번, 사원명, 이메일, 폰번호, 급여를 조회 / 반대일 경우 IS NOT 사용
+SELECT EMP_ID, EMP_NAME, EMAIL, PHONE, SALARY FROM EMPLOYEE WHERE RETIRE_DATE IS NOT NULL;
+
+/*************************************************************************************************************************************************
+	IF NULL : NULL 값을 다른 값으로 대체하는 방법
+    형식 > IFNULL(NULL포함 컬럼명, 대체값);
+**************************************************************************************************************************************************/
+-- STG 부서에 속한 사원들의 정보 조회, 단 급여가 NULL인 사원은 0으로 치환
+SELECT EMP_ID, EMP_NAME, EMAIL, PHONE, IFNULL(SALARY, 0) AS SALARY FROM EMPLOYEE WHERE DEPT_ID ='STG';
+
+
 
 
 
