@@ -508,20 +508,56 @@ format(ifnull(salary,0) *0.2, 0) as bonus from employee
 where left(hire_date, 4) between '2016' and '2017'
 order by emp_id desc;
 
+-- [날짜함수]
+-- curdate() : 현재 날짜(년, 월, 일)를 가지고 옴
+-- sysdate(), now() : 현재 날짜(년, 월, 일, 시, 분, 초) / 가입하거나 주문할 경우 사용
+select curdate(), sysdate(), now() from dual;
 
+-- [형변환 함수]
+-- cast(변환하고자 하는 값 as 데이터 타입) / 사용 시 이걸로 진행하면 됨
+-- convert(변환하고자 하는 값 as 데이터 타입) / MySQL에서 이전에 사용하던 Old 버전
+select 1234 as number, cast(1234 as char) as string from dual; -- 1234 숫자가 문자열(스트링)로 전환됨
+select '1234' as string, cast('1234' as signed integer) as number from dual;
+select '20250723' as string, cast('20250723' as date) as date from dual; -- 페이지에서 가져오는 날짜 데이터는 문자열이므로 date 타입으로 변환하면 하이픈으로 구분됨
+select now() as date,
+	   cast(now() as char) as string,
+       cast(cast(now() as char) as date) as date,
+       cast(cast(now() as char) as datetime) as date,
+       curdate() as date_time_before,
+       cast(curdate() as datetime) as datetime
+from dual;
 
+select'12345' as string,
+	   cast('12345' as signed integer) as cast_int,
+	   cast('12345' as unsigned integer) as cast_int,
+	   cast('12345' as decimal(10, 2)) as cast_decinal
+from dual;
 
+-- [문자 치환 함수]
+-- replace(문자열, old, new)
+select '홍-길-동' as old, replace('홍-길-동', '-', ',') as new from dual;
 
+-- 사원 테이블의 사번, 사원명, 입사일, 퇴사일, 부서아이디, 폰번호, 급여를 조회
+-- 입사일, 퇴사일 출력은 '-'을 '/'로 치환하여 출력
+-- 재직중인 사원은 현재 날짜를 출력
+-- 급여 출력시 3자리 콤마(,) 구분
+select emp_id, emp_name,
+	-- replace(cast(hire_date as char), '-', '/') as hire_date, // 이렇게 줘도 되지만 버전이 올라가면서 자동으로 처리되어 안해도 됨, 그러나 이게 정석 / 모든 디비에 적용되지는 않음
+    replace(hire_date, '-', '/') as hire_date,
+    replace(ifnull(retire_date, curdate()), '-', '/') as retire_date,
+    phone, format(salary, 0) as salary
+from employee;
 
+-- '20150101' 입력된 날짜를 기준으로 해당 날짜 이후에 입사한 사원들을 모두 조회
+-- 조건 없을 경우
+select * from employee where hire_date >= '20150101'; -- 오라클은 자동으로 변환해주지 않음, 자동 전환은 지양하는 편
 
+-- 모든 mysql 데이터베이스에서 적용 가능한 형태로 작성
+select * from employee where hire_date >= cast('20150101' as date);
 
+-- '20150101' ~ '20171231' 사이에 입사한 사원들을 모두 조회
+-- 모든 mysql 데이터베이스에서 적용 가능한 형태로 작성
+select * from employee where hire_date between cast('20150101' as date) and cast('20171231' as date);
 
-
-
-
-
-
-
-
-
-
+-- 조건 없을 경우
+select * from employee where hire_date between '20150101' and '20171231';
