@@ -37,7 +37,7 @@ MySQL :: 정형 데이터를 저장하는 데이터베이스
   > grant, revoke
   
 4. DTL(TCL이라고도 함) (Data Transaction Language, TCL) : 트랜잭션 제어어
-  : 데이터베이스의 처리 작원 단위인 트랜잭션을 관리하는 언어
+  : 데이터베이스의 처리 작업 단위인 트랜잭션을 관리하는 언어
   > commit, save, rollback
 
 -- "--"은 주석 처리(단축키는 "컨트롤 + /"), 번개 표시 누르면 표시됨, 컨트롤 + 엔터 눌러도 나옴
@@ -69,7 +69,7 @@ show tables;
 
 ===================================================================================================================================================
 
-section 02. 실습
+section 02. 실습 (day 1)
 
 ===================================================================================================================================================
 */
@@ -371,3 +371,157 @@ SELECT * FROM EMPLOYEE WHERE EMAIL LIKE '_a%';
 
 -- 이메일 아이디가 4자인 모든 사원을 조회
 SELECT * FROM EMPLOYEE WHERE EMAIL LIKE '____@%';
+
+
+
+
+
+
+/*
+===================================================================================================================================================
+
+section 02. 실습 (day 2)
+
+===================================================================================================================================================
+*/
+
+/*************************************************************************************************************************************************
+	내장함수 : 숫자함수, 문자함수, 날짜함수
+    호출되는 위치 - [컬럼리스트], [조건절의 컬럼명]
+            
+**************************************************************************************************************************************************/
+USE HRDB2019;
+SELECT DATABASE();
+SHOW TABLES;
+
+-- [숫자함수]
+-- 함수 실습을 위한 테이블 : DUAL 테이블
+
+-- (1) abs(숫자) : 절대값
+select abs(100), abs(-100) from dual;
+
+-- (2) floor(숫자), truncate(숫자, 자리수) : 소수점 버리기
+select floor(123.456), truncate(123.456, 0), truncate(123.456, 1) from dual;
+
+-- 사원테이블의 sys부서 사원들의 사원명, 부서아이디, 폰번호, 급여, 보너스(급여의 25%) 컬럼을 추가하여 조회
+select emp_name, emp_id, phone, salary, salary*0.25 as bonus from employee where dept_id = 'sys';
+
+-- 보너스 컬럼은 소수점 1자리로 출력
+select emp_name, emp_id, phone, salary, truncate(salary*0.25, 1) as bonus from employee where dept_id = 'sys';
+
+-- (3) RAND() : 임의의 수를 난수로 발생시키는 함수이며 0 ~ 1 사이의 난수를 생성 (RAND : 랜덤의 약자)
+select rand() from dual;
+select floor(rand() * 1000) as randnumber from dual; -- 정수 3자리(0 ~ 999) 난수 발생
+
+-- 정수 4자리(0 ~ 9999) 난수 발생, 소수점 2자리
+select truncate(rand() * 10000, 2) as randnumber from dual;
+
+-- (4) mod(숫자, 나누는 수) : 나머지 함수
+select mod(123, 2) as odd, mod(124, 2) as even from dual;
+
+-- 3자리 수를 랜덤으로 발생시켜 2로 나눈 후 홀수, 짝수를 구분
+select mod(floor(rand() * 1000), 2) as result from dual;
+select mod(truncate(rand() * 1000, 0), 2) as result from dual;
+select floor(rand() * 1000) as result01, mod(truncate(rand() * 1000, 0), 2) as result02 from dual;
+
+-- [문자함수]
+
+-- (1) concat(문자열1, 문자열2 ...) : 문자열 합쳐주는 함수
+select concat('안녕하세요~ ', '홍길동', '입니다.') as str;
+
+-- 사번, 사원명, 사원명2 컬럼을 생성하여 조회
+-- 사원명2 컬럼의 데이터 형식은 S0001(홍길동) 출력
+select emp_id, emp_name, concat(emp_id, ' ( ', emp_name, ' )') as emp_name2 from employee;
+
+-- 사번, 사원명, 영어이름, 입사일, 폰번호, 급여를 조회
+select emp_id, emp_name, eng_name, hire_date, phone, salary from employee;
+
+-- 영어이름의 출력형식을 '홍길동/hong' 타입으로 출력
+select emp_id, concat(emp_name, ' / ', eng_name) as eng_name, hire_date, phone, salary from employee;
+
+-- 영어이름이 null인 경우에는 'smith'를 기본으로 조회
+-- 따옴표는 싱글과 더블 혼용 가능하나 실제로 사용시에는 기준에 맞춰 하나만 사용해야 함
+select emp_id, concat(emp_name, " / ", ifnull(eng_name, 'smith')) as eng_name, hire_date, phone, salary from employee;
+
+-- (2) substring(문자열, 위치, 갯수) : 문자열 추출
+select substring('대한민국 홍길동', 1, 4), -- 메모리 구조가 아니기에 인덱스가 0번으로 시작안함, 저장소 관련 작업만 인덱스가 1번으로 시작함
+	   substring('대한민국 홍길동', 1, 5), -- 공백도 하나의 문자로 인식하여 처리
+	   substring('대한민국 홍길동', 6, 3) from dual;
+
+-- 사원테이블의 사번, 사원명, 입사년도, 입사월, 입사일, 급여를 조회
+select * from employee;
+select emp_id, emp_name, substring(hire_date, 1, 4) as 입사년도, substring(hire_date, 6, 2) as 입사월, substring(hire_date, 9, 2) as 입사일, salary from employee;
+
+-- 2015년도에 입사한 모든 사원 조회
+-- select * from employee where hire_date = '2015'; -- 실제 데이터에는 년도 외에 월과 일이 들어가져 있어 진행 안됨
+select * from employee where substring(hire_date, 1, 4) = '2015';
+
+-- 2018년도에 입사한 정보시스템(sys) 부서 사원 조회
+select * from employee where substring(hire_date, 1, 4) = '2018' and dept_id = 'sys';
+
+-- (3) left(문자열, 갯수), right(문자열, 갯수) : 왼쪽, 오른쪽 기준으로 문자열 추출
+select curdate() from dual;
+select left(curdate(), 4) as year, right('010-1234-5678', 4) as phone from dual;
+
+-- 2018년도에 입사한 모든 사원 조회
+select * from employee where left(hire_date, 4) = '2018';
+
+-- 2015년부터 2017년 사이에 입사한 모든 사원 조회
+select * from employee where left(hire_date, 4) between '2015' and '2017';
+
+-- 사원번호, 사원명, 입사일, 폰번호, 급여를 조회
+-- 폰번호는 마지막 4자리만 출력
+select emp_id, emp_name, hire_date, right(phone, 4) as phone, salary from employee;
+
+-- (4) upper(문자열), lower(문자열) : 대문자, 소문자로 치환 / 오라클에서는 뒤에 케이스가 붙음, uppercase, lowercase
+select upper('welcomeToMysql~!'), lower('welcomeToMysql~!') from dual;
+
+-- 사번, 사원명, 영어이름, 부서아이디, 이메일, 급여를 조회
+-- 영어이름은 전체 대문자, 부서아이디는 소문자, 이메일은 대문자
+select emp_id, emp_name,
+		upper(eng_name) as eng_name,
+        lower(dept_id) as dept_id,
+        upper(email) as email, salary from employee;
+
+-- (5) trim() : 공백 제거 / 중간에 있는 공백은 제거 안됨
+select trim('         대한민국') as t1,
+	   trim('대한민국         ') as t2,
+	   trim('대한         민국') as t3,
+	   trim('     대한민국    ') as t4 from dual;
+
+-- (6) format(문자열, 소수점자리) : 문자열 포맷
+select format(123456, 0) as format from dual; -- 낮은 버전에서는 인식이 안됨
+select format('123456', 0) as format from dual;
+
+-- 사번, 사원명, 입사일, 폰번호, 급여, 보너스(급여의 20%)
+-- 급여, 보너스는 소수점 없이 3자리 콤마(,)로 구분하여 출력
+select emp_id, emp_name, hire_date, phone, format(salary, 0) as salary, format(salary *0.2, 0) as bonus from employee;
+
+-- 급여가 null인 경우에는 기본값 0
+select emp_id, emp_name, hire_date, phone, format(ifnull(salary, 0), 0) as salary, format(ifnull(salary,0) *0.2, 0) as bonus from employee;
+
+-- 2015년부터 2017년 사이에 입사한 사원을 조회
+-- 사번 기준으로 내림차순 정렬
+select emp_id, emp_name, hire_date, phone,
+format(ifnull(salary, 0), 0) as salary,
+format(ifnull(salary,0) *0.2, 0) as bonus from employee
+where left(hire_date, 4) between '2016' and '2017'
+order by emp_id desc;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
