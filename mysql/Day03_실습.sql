@@ -40,7 +40,7 @@ select * from employee, department; -- 테이블 조회
 --
 select count(*) from vacation; -- 102
 
--- 사원, 부서, 휴가 테이블 cross join : 20 * 7 * 102 / 몇 천건이였으나 통신 발달 후 몇 억건 정도로 늘어남, 테스트 이외에는 사용 주의, 실제 데이터에 사용 시 다운될 수 있음
+-- 사원, 부서, 휴가 테이블 cross join : 20 * 7 * 102 / 테스트 이외에는 사용 주의, 실제 데이터에 사용 시 다운될 수 있음
 select count(*) from employee, department, vacation; -- 오라클에서는 이런 형태로 사용
 select count(*)
 from employee corss join department, corss join vacation;
@@ -51,11 +51,11 @@ from employee corss join department, vacation;
 
 /*------------------------------------------------------------------------------------------------------------------------------------------------
 
-	조인 > inner join : 비 ANSI(구식), 오라클·MySQL 등에서 사용 가능
+	조인 > inner join : 기본 SQL 방식, 오라클·MySQL 등에서 사용 가능
     (FROM 뒤에 ,(쉼표)로 테이블 나열 + WHERE로 조인 조건 작성)
     
 	형식 __________________________________________________________________________________________________________________________________________
-	1. 비 ANSI(구식)		> select [컬럼리스트] from [테이블1], [테이블2], ...
+	1. 기본 SQL 방식		> select [컬럼리스트] from [테이블1], [테이블2], ...
 								  where [테이블1.조인컬럼] = [테이블2.조인컬럼]
 										 and [조건절~]
 	2. ANSI SQL 표준		> select [컬럼리스트] from [테이블1] 
@@ -78,7 +78,7 @@ from employee inner join department
 on employee.dept_id = department.dept_id
 order by emp_id;
 
--- inner join : 비 ANSI(구식), 오라클·MySQL 등에서 사용 가능 (3개 테이블)
+-- inner join : 기본 SQL 방식, 오라클·MySQL 등에서 사용 가능 (3개 테이블)
 -- (직접 FROM에 ,로 다 나열 + WHERE에서 각각 연결)
 -- ※ 전략기획에 인원이 없어도 전략기획이 나타나려면 OUTER JOIN으로!
 select *
@@ -94,7 +94,7 @@ from employee e
 	inner join department d on e.dept_id = d.dept_id
 	inner join unit u on d.unit_id = u.unit_id;
 
--- inner join : 비 ANSI(구식), 오라클·MySQL 등에서 사용 가능 (4개 테이블)
+-- inner join : 기본 SQL 방식, 오라클·MySQL 등에서 사용 가능 (4개 테이블)
 select *
 from employee e, department d, unit u, vacation v
 where e.dept_id = d.dept_id
