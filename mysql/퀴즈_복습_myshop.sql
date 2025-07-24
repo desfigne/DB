@@ -515,17 +515,14 @@ use myshop2019;
 select database();
 show tables;
 /* 테이블
-- category
-- customer
-- employee
-- order_detail
-- order_detail2016
-- order_detail2017
-- order_header
-- order_header2016
-- order_header2017
-- product
-- sub_category
+- category / product / sub_category
+- customer / employee
+- order_header / order_header2016 / order_header2017
+- order_detail / order_detail2016 / order_detail2017
+*/
+/*
+select @ / from @ / join @ / on @
+where @ / group by @ / having @ / order by @;
 */
 
 
@@ -533,70 +530,205 @@ show tables;
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q01) 전체금액이 8,500,000 이상인 주문의 주문번호, 고객아이디, 사원번호, 주문일시, 전체금액을 조회하세요.
-select * from order_detail;
+select o.order_id 주문번호, o.customer_id 고객아이디, o.employee_id 사원번호, o.order_date 주문일시, o.total_due 전체금액
+from order_header o
+where total_due >= 8500000;
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q02) 위에서 작성한 쿼리문을 복사해 붙여 넣은 후 고객이름도 같이 조회되게 수정하세요.
+select o.order_id 주문번호, c.customer_id 고객아이디, c.customer_name 고객이름, o.employee_id 사원번호, o.order_date 주문일시, o.total_due 전체금액
+from order_header o, customer c
+where total_due >= 8500000
+and o.customer_id = c.customer_id;
+
+-- <<< 테이블 조인 사용 >>>
+select o.order_id 주문번호, c.customer_id 고객아이디, c.customer_name 고객이름, o.employee_id 사원번호, o.order_date 주문일시, o.total_due 전체금액
+from order_header o
+join customer c on o.customer_id = c.customer_id
+where total_due >= 8500000;
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q03) Q01 쿼리를 복사해 붙여 넣은 후 직원이름도 같이 조회되게 수정하세요.
+select o.order_id 주문번호, o.customer_id 고객아이디, e.employee_name 사원이름, o.order_date 주문일시, o.total_due 전체금액
+from order_header o, employee e
+where total_due >= 8500000
+and o.employee_id = e.employee_id;
+
+-- <<< 테이블 조인 사용 >>>
+select o.order_id 주문번호, o.customer_id 고객아이디, e.employee_name 사원이름, o.order_date 주문일시, o.total_due 전체금액
+from order_header o
+join employee e on o.employee_id = e.employee_id
+where total_due >= 8500000;
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q04) 위에서 작성한 쿼리문을 복사해 붙여 넣은 후 고객이름, 직원이름도 같이 조회되게 수정하세요.
+select o.order_id 주문번호, o.customer_id 고객아이디, c.customer_name 고객이름, e.employee_name 사원이름, o.order_date 주문일시, o.total_due 전체금액
+from order_header o, customer c, employee e
+where total_due >= 8500000
+and o.customer_id = c.customer_id
+and o.employee_id = e.employee_id;
+
+-- <<< 테이블 조인 사용 >>>
+select o.order_id 주문번호, o.customer_id 고객아이디, c.customer_name 고객이름, e.employee_name 사원이름, o.order_date 주문일시, o.total_due 전체금액
+from order_header o
+join customer c on o.customer_id = c.customer_id
+join employee e on o.employee_id = e.employee_id
+where total_due >= 8500000;
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q05) 위에서 작성한 쿼리문을 복사해 붙여 넣은 후 전체금액이 8,500,000 이상인 '서울' 지역 고객만 조회되게 수정하세요.
+select o.order_id 주문번호, o.customer_id 고객아이디, c.customer_name 고객이름, c.city 고객거주지역, e.employee_name 사원이름, o.order_date 주문일시, o.total_due 전체금액
+from order_header o, customer c, employee e
+where total_due >= 8500000
+and c.city = '서울'
+and o.customer_id = c.customer_id
+and o.employee_id = e.employee_id;
+
+-- <<< 테이블 조인 사용 >>>
+select o.order_id 주문번호, o.customer_id 고객아이디, c.customer_name 고객이름, c.city 고객거주지역, e.employee_name 사원이름, o.order_date 주문일시, o.total_due 전체금액
+from order_header o
+join customer c on o.customer_id = c.customer_id
+join employee e on o.employee_id = e.employee_id
+where total_due >= 8500000
+and c.city = '서울';
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q06) 위에서 작성한 쿼리문을 복사해 붙여 넣은 후 전체금액이 8,500,000 이상인 '서울' 지역 '남자' 고객만 조회되게 수정하세요.
+select o.order_id 주문번호, o.customer_id 고객아이디, c.customer_name 고객이름, c.city 고객거주지역, c.gender 고객성별, e.employee_name 사원이름, o.order_date 주문일시, o.total_due 전체금액
+from order_header o, customer c, employee e
+where total_due >= 8500000
+and c.city = '서울' and c.gender = 'M'
+and o.customer_id = c.customer_id
+and o.employee_id = e.employee_id;
+
+-- <<< 테이블 조인 사용 >>>
+select o.order_id 주문번호, o.customer_id 고객아이디, c.customer_name 고객이름, c.city 고객거주지역, c.gender 고객성별, e.employee_name 사원이름, o.order_date 주문일시, o.total_due 전체금액
+from order_header o
+join customer c on o.customer_id = c.customer_id
+join employee e on o.employee_id = e.employee_id
+where total_due >= 8500000
+and c.city = '서울' and c.gender = 'M';
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q07) 주문수량이 30개 이상인 주문의 주문번호, 상품코드, 주문수량, 단가, 지불금액을 조회하세요.
+select o.order_id 주문번호, p.product_id 상품코드, o.order_qty 주문수량, o.unit_price 상품단가, o.line_total 지불금액
+from order_detail o, product p
+where o.product_id = p.product_id;
+
+-- <<< 테이블 조인 사용 >>>
+select o.order_id 주문번호, p.product_id 상품코드, o.order_qty 주문수량, o.unit_price 상품단가, o.line_total 지불금액
+from order_detail o
+join product p on o.product_id = p.product_id
+where o.order_qty >= 30;
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q08) 위에서 작성한 쿼리문을 복사해서 붙여 넣은 후 상품이름도 같이 조회되도록 수정하세요.
+select o.order_id 주문번호, p.product_id 상품코드, p. product_name 상품이름, o.order_qty 주문수량, o.unit_price 상품단가, o.line_total 지불금액
+from order_detail o, product p
+where o.product_id = p.product_id;
+
+-- <<< 테이블 조인 사용 >>>
+select o.order_id 주문번호, p.product_id 상품코드, p. product_name 상품이름, o.order_qty 주문수량, o.unit_price 상품단가, o.line_total 지불금액
+from order_detail o
+join product p on o.product_id = p.product_id
+where o.order_qty >= 30;
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q09) 상품코드, 상품이름, 소분류아이디를 조회하세요.
+select p.product_id 상품코드, p.product_name 상품이름, s.sub_category_id 소분류코드
+from product p, sub_category s
+where p.sub_category_id = s.sub_category_id;
+
+-- <<< 테이블 조인 사용 >>>
+select p.product_id 상품코드, p.product_name 상품이름, s.sub_category_id 소분류코드
+from product p
+join sub_category s on p.sub_category_id = s.sub_category_id;
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q10) 위에서 작성한 쿼리문을 복사해서 붙여 넣은 후 소분류이름, 대분류아이디가 조회되게 수정하세요.
+select s.sub_category_name 상품소분류, p.product_id 상품대분류코드
+from product p, sub_category s
+where p.sub_category_id = s.sub_category_id;
+
+-- <<< 테이블 조인 사용 >>>
+select s.sub_category_name 상품소분류, p.product_id 상품대분류코드
+from product p
+join sub_category s on p.sub_category_id = s.sub_category_id;
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q11) 다정한 사원이 2019년에 주문한 상품명을 모두 출력해주세요.
+select e.employee_name 사원이름, left(oh.order_date, 4) 주문년도, p.product_name 주문상품
+from employee e, order_header oh, order_detail od, product p
+where oh.order_id = od.order_id
+and oh.employee_id = e.employee_id
+and od.product_id = p.product_id
+and left(oh.order_date, 4) = '2019'
+and e.employee_name = '다정한';
+
+-- <<< 테이블 조인 사용 >>>
+select e.employee_name 사원이름, left(oh.order_date, 4) 주문년도, p.product_name 주문상품
+from employee e
+join order_header oh on oh.employee_id = e.employee_id
+join order_detail od on od.order_id = oh.order_id
+join product p on od.product_id = p.product_id
+where left(oh.order_date, 4) = '2019'
+and e.employee_name = '다정한';
 
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- Q12) 청소기를 구입한 고객아이디, 사원번호, 주문번호, 주문일시를 조회하세요.
+select od.product_id 청소기분류코드, c.customer_id 고객아이디, e.employee_id 사원번호, od.order_id 주문번호, oh.order_date 주문일시
+from product p, customer c, employee e, order_header oh, order_detail od
+where od.product_id = p.product_id
+and c.customer_id = oh.customer_id
+and od.order_id = oh.order_id
+and e.employee_id = oh.employee_id
+and p.product_id between 'ED007' and 'ED009';
+
+-- <<< 테이블 조인 사용 >>>
+select * from product;
+select * from customer;
+select * from employee;
+select * from order_header;
+select * from order_detail;
+select od.product_id 청소기분류코드, c.customer_id 고객아이디, e.employee_id 사원번호, od.order_id 주문번호, oh.order_date 주문일시
+from product p
+join order_detail od on od.product_id = p.product_id
+join order_header oh on oh.order_id = od.order_id
+join customer c on c.customer_id = oh.customer_id
+join employee e on e.employee_id = oh.employee_id
+where p.product_id between 'ED007' and 'ED009';
+
+
