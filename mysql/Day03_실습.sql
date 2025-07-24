@@ -241,3 +241,5 @@ where e.emp_id = m.emp_id;
 select emp_id, emp_name													-- < 서브쿼리 형식
 from employee
 where emp_id = (select emp_id from employee where emp_name = '홍길동');	-- > 서브쿼리 형식
+
+
