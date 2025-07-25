@@ -402,3 +402,6 @@ select * from employee order by salary desc limit 5;
 -- mysql에만 limit 개념이 있고 다른 db에는 리미트가 없어 다른 방식으로 처리
 
 
+
+
+

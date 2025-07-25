@@ -245,3 +245,6 @@ from employee
 where emp_id = (select emp_id from employee where emp_name = '홍길동');	-- > 서브쿼리 형식
 
 
+
+
+
