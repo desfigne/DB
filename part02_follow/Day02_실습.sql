@@ -9,7 +9,7 @@
 /*________________________________________________________________________________________________________________________________________________
 
 	내장 함수 : 숫자 함수, 문자 함수, 날짜 함수
-    호출되는 위치 - [컬럼리스트], [조건절의 컬럼명]
+	호출되는 위치 - [컬럼리스트], [조건절의 컬럼명]
     
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -22,7 +22,7 @@ SHOW TABLES;
 /*________________________________________________________________________________________________________________________________________________
 
 	숫자 함수
-    함수 실습을 위한 테이블 : DUAL 테이블
+	함수 실습을 위한 테이블 : DUAL 테이블
     
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -114,9 +114,9 @@ select upper('welcomeToMysql~!'), lower('welcomeToMysql~!') from dual;
 -- 사번, 사원명, 영어이름, 부서아이디, 이메일, 급여를 조회
 -- 영어이름은 전체 대문자, 부서아이디는 소문자, 이메일은 대문자
 select emp_id, emp_name,
-		upper(eng_name) as eng_name,
-        lower(dept_id) as dept_id,
-        upper(email) as email, salary from employee;
+	   upper(eng_name) as eng_name,
+	   lower(dept_id) as dept_id,
+	   upper(email) as email, salary from employee;
 
 -- (5) trim() : 공백 제거 / 중간에 있는 공백은 제거 안됨
 select trim('         대한민국') as t1,
@@ -170,10 +170,10 @@ select '1234' as string, cast('1234' as signed integer) as number from dual;
 select '20250723' as string, cast('20250723' as date) as date from dual; -- 페이지에서 가져오는 날짜 데이터는 문자열이므로 date 타입으로 변환하면 하이픈으로 구분됨
 select now() as date,
 	   cast(now() as char) as string,
-       cast(cast(now() as char) as date) as date,
-       cast(cast(now() as char) as datetime) as date,
-       curdate() as date_time_before,
-       cast(curdate() as datetime) as datetime
+	   cast(cast(now() as char) as date) as date,
+	   cast(cast(now() as char) as datetime) as date,
+	   curdate() as date_time_before,
+	   cast(curdate() as datetime) as datetime
 from dual;
 
 select'12345' as string,
@@ -198,10 +198,10 @@ select '홍-길-동' as old, replace('홍-길-동', '-', ',') as new from dual;
 -- 재직중인 사원은 현재 날짜를 출력
 -- 급여 출력시 3자리 콤마(,) 구분
 select emp_id, emp_name,
-	-- replace(cast(hire_date as char), '-', '/') as hire_date, // 이렇게 줘도 되지만 버전이 올라가면서 자동으로 처리되어 안해도 됨, 그러나 이게 정석 / 모든 디비에 적용되지는 않음
-    replace(hire_date, '-', '/') as hire_date,
-    replace(ifnull(retire_date, curdate()), '-', '/') as retire_date,
-    phone, format(salary, 0) as salary
+	   -- replace(cast(hire_date as char), '-', '/') as hire_date, // 이렇게 줘도 되지만 버전이 올라가면서 자동으로 처리되어 안해도 됨, 그러나 이게 정석 / 모든 디비에 적용되지는 않음
+	   replace(hire_date, '-', '/') as hire_date,
+	   replace(ifnull(retire_date, curdate()), '-', '/') as retire_date,
+	   phone, format(salary, 0) as salary
 from employee;
 
 -- '20150101' 입력된 날짜를 기준으로 해당 날짜 이후에 입사한 사원들을 모두 조회
@@ -223,9 +223,9 @@ select * from employee where hire_date between '20150101' and '20171231';
 /*________________________________________________________________________________________________________________________________________________
 
 	그룹(집계) 함수 : sum(), avg(), min(), max(), count() ...
-    group by - 그룹 함수를 적용하기 위한 그룹핑 컬럼 정의
-    having - 그룹 함수에서 사용하는 조건절 (where 절은 따로 별개임, having은 그룹 함수 내에서만)
-    ** 그룹 함수는 그룹핑이 가능한 반복된 데이터를 가진 컬럼과 사용하는게 더 올바름
+	group by - 그룹 함수를 적용하기 위한 그룹핑 컬럼 정의
+	having - 그룹 함수에서 사용하는 조건절 (where 절은 따로 별개임, having은 그룹 함수 내에서만)
+	** 그룹 함수는 그룹핑이 가능한 반복된 데이터를 가진 컬럼과 사용하는게 더 올바름
     
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -292,7 +292,7 @@ select * from employee where hire_date = (select min(hire_date) from employee);
 /*________________________________________________________________________________________________________________________________________________
 
 	그룹(집계) 함수 > group by : 그룹 함수와 일반 컬럼을 함께 사용할 수 있도록 함
-    ~별 그룹핑이 가능한 컬럼으로 쿼리를 실행
+	~별 그룹핑이 가능한 컬럼으로 쿼리를 실행
     
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -305,9 +305,9 @@ select dept_id, sum(salary), avg(salary), count(*), max(salary), min(salary) fro
 select left(hire_date, 4) 연도,
 	   count(*) 사원수,
 	   format(sum(salary), 0) 총급여,
-       format(avg(salary), 0) 평균급여,
-       format(max(salary), 0) 최대급여,
-       format(min(salary), 0) 최소급여
+	   format(avg(salary), 0) 평균급여,
+	   format(max(salary), 0) 최대급여,
+	   format(min(salary), 0) 최소급여
 from employee
 group by left(hire_date, 4);
 
@@ -318,7 +318,7 @@ group by left(hire_date, 4);
 /*________________________________________________________________________________________________________________________________________________
 
 	그룹(집계) 함수 > having 조건절 : 그룹 함수를 적용한 결과에 조건을 추가
-    그룹으로 산출된 결과가 나오고 나서 그 결과 값에서 조건을 적용
+	그룹으로 산출된 결과가 나오고 나서 그 결과 값에서 조건을 적용
     
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -327,7 +327,7 @@ group by left(hire_date, 4);
 -- 급여 컬럼의 null은 제외
 select dept_id,
 	   format(sum(salary), 0) 총급여,
-       format(avg(salary), 0) 평균급여
+	   format(avg(salary), 0) 평균급여
 from employee
 where salary is not null
 group by dept_id
@@ -340,9 +340,9 @@ having sum(salary) >= 30000;
 select left(hire_date, 4) 연도,
 	   count(*) 사원수,
 	   format(sum(salary), 0) 총급여,
-       format(avg(salary), 0) 평균급여,
-       format(max(salary), 0) 최대급여,
-       format(min(salary), 0) 최소급여
+	   format(avg(salary), 0) 평균급여,
+	   format(max(salary), 0) 최대급여,
+	   format(min(salary), 0) 최소급여
 from employee
 where salary is not null
 group by left(hire_date, 4)
@@ -359,8 +359,8 @@ having sum(salary) >= 30000;
 -- 부서별 사원수, 총급여, 평균급여 조회
 select dept_id 부서,
 	   count(*) 사원수,
-       format(sum(ifnull(salary, 0)), 0) 총급여,
-       format(avg(ifnull(salary, 0)), 0) 평균급여
+	   format(sum(ifnull(salary, 0)), 0) 총급여,
+	   format(avg(ifnull(salary, 0)), 0) 평균급여
 from employee
 group by dept_id with rollup;
 
@@ -368,8 +368,8 @@ group by dept_id with rollup;
 -- 부서별 사원수, 총급여, 평균급여 조회
 select if(grouping(dept_id), '총합계', ifnull(dept_id, '-')) 부서명,
 	   count(*) 사원수,
-       format(sum(ifnull(salary, 0)), 0) 총급여,
-       format(avg(ifnull(salary, 0)), 0) 평균급여
+	   format(sum(ifnull(salary, 0)), 0) 총급여,
+	   format(avg(ifnull(salary, 0)), 0) 평균급여
 from employee
 group by dept_id with rollup;
 
@@ -381,9 +381,9 @@ group by dept_id with rollup;
 select left(hire_date, 4) 연도,
 	   count(*) 사원수,
 	   format(sum(salary), 0) 총급여,
-       format(avg(salary), 0) 평균급여,
-       format(max(salary), 0) 최대급여,
-       format(min(salary), 0) 최소급여
+	   format(avg(salary), 0) 평균급여,
+	   format(max(salary), 0) 최대급여,
+	   format(min(salary), 0) 최소급여
 from employee
 where salary is not null
 group by left(hire_date, 4)
