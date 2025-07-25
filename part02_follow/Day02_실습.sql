@@ -80,8 +80,8 @@ select emp_id, concat(emp_name, " / ", ifnull(eng_name, 'smith')) as eng_name, h
 
 -- (2) substring(문자열, 위치, 갯수) : 문자열 추출
 select substring('대한민국 홍길동', 1, 4), -- 메모리 구조가 아니기에 인덱스가 0번으로 시작안함, 저장소 관련 작업만 인덱스가 1번으로 시작함
-	   substring('대한민국 홍길동', 1, 5), -- 공백도 하나의 문자로 인식하여 처리
-	   substring('대한민국 홍길동', 6, 3) from dual;
+       substring('대한민국 홍길동', 1, 5), -- 공백도 하나의 문자로 인식하여 처리
+       substring('대한민국 홍길동', 6, 3) from dual;
 
 -- 사원테이블의 사번, 사원명, 입사년도, 입사월, 입사일, 급여를 조회
 select * from employee;
@@ -114,15 +114,15 @@ select upper('welcomeToMysql~!'), lower('welcomeToMysql~!') from dual;
 -- 사번, 사원명, 영어이름, 부서아이디, 이메일, 급여를 조회
 -- 영어이름은 전체 대문자, 부서아이디는 소문자, 이메일은 대문자
 select emp_id, emp_name,
-	   upper(eng_name) as eng_name,
-	   lower(dept_id) as dept_id,
-	   upper(email) as email, salary from employee;
+       upper(eng_name) as eng_name,
+       lower(dept_id) as dept_id,
+       upper(email) as email, salary from employee;
 
 -- (5) trim() : 공백 제거 / 중간에 있는 공백은 제거 안됨
 select trim('         대한민국') as t1,
-	   trim('대한민국         ') as t2,
-	   trim('대한         민국') as t3,
-	   trim('     대한민국    ') as t4 from dual;
+       trim('대한민국         ') as t2,
+       trim('대한         민국') as t3,
+       trim('     대한민국    ') as t4 from dual;
 
 -- (6) format(문자열, 소수점자리) : 문자열 포맷
 select format(123456, 0) as format from dual; -- 낮은 버전에서는 인식이 안됨
@@ -169,17 +169,17 @@ select 1234 as number, cast(1234 as char) as string from dual; -- 1234 숫자가
 select '1234' as string, cast('1234' as signed integer) as number from dual;
 select '20250723' as string, cast('20250723' as date) as date from dual; -- 페이지에서 가져오는 날짜 데이터는 문자열이므로 date 타입으로 변환하면 하이픈으로 구분됨
 select now() as date,
-	   cast(now() as char) as string,
-	   cast(cast(now() as char) as date) as date,
-	   cast(cast(now() as char) as datetime) as date,
-	   curdate() as date_time_before,
-	   cast(curdate() as datetime) as datetime
+       cast(now() as char) as string,
+       cast(cast(now() as char) as date) as date,
+       cast(cast(now() as char) as datetime) as date,
+       curdate() as date_time_before,
+       cast(curdate() as datetime) as datetime
 from dual;
 
-select'12345' as string,
-	   cast('12345' as signed integer) as cast_int,
-	   cast('12345' as unsigned integer) as cast_int,
-	   cast('12345' as decimal(10, 2)) as cast_decinal
+select '12345' as string,
+       cast('12345' as signed integer) as cast_int,
+       cast('12345' as unsigned integer) as cast_int,
+       cast('12345' as decimal(10, 2)) as cast_decinal
 from dual;
 
 
@@ -198,10 +198,10 @@ select '홍-길-동' as old, replace('홍-길-동', '-', ',') as new from dual;
 -- 재직중인 사원은 현재 날짜를 출력
 -- 급여 출력시 3자리 콤마(,) 구분
 select emp_id, emp_name,
-	   -- replace(cast(hire_date as char), '-', '/') as hire_date, // 이렇게 줘도 되지만 버전이 올라가면서 자동으로 처리되어 안해도 됨, 그러나 이게 정석 / 모든 디비에 적용되지는 않음
-	   replace(hire_date, '-', '/') as hire_date,
-	   replace(ifnull(retire_date, curdate()), '-', '/') as retire_date,
-	   phone, format(salary, 0) as salary
+       -- replace(cast(hire_date as char), '-', '/') as hire_date, // 이렇게 줘도 되지만 버전이 올라가면서 자동으로 처리되어 안해도 됨, 그러나 이게 정석 / 모든 디비에 적용되지는 않음
+       replace(hire_date, '-', '/') as hire_date,
+       replace(ifnull(retire_date, curdate()), '-', '/') as retire_date,
+       phone, format(salary, 0) as salary
 from employee;
 
 -- '20150101' 입력된 날짜를 기준으로 해당 날짜 이후에 입사한 사원들을 모두 조회
@@ -258,9 +258,9 @@ select min(salary) from employee;
 -- 사원들의 총급여, 평균급여, 최대급여, 최소급여를 조회
 -- 3자리 구분
 select format(sum(salary), 0) as 총급여,
-	   format(avg(salary), 0) as 평균급여,
-	   format(max(salary), 0) as 최대급여,
-	   format(min(salary), 0) as 최소급여
+       format(avg(salary), 0) as 평균급여,
+       format(max(salary), 0) as 최대급여,
+       format(min(salary), 0) as 최소급여
 from employee;
 
 -- (5) count(컬럼) : 조건에 맞는 데이터의 row 수를 조회, null은 제외
@@ -303,11 +303,11 @@ select dept_id, sum(salary), avg(salary), count(*), max(salary), min(salary) fro
 -- 연도별 사원수, 총급여, 평균급여, 최대급여, 최소급여 조회
 -- 소수점 X, 3자리 구분
 select left(hire_date, 4) 연도,
-	   count(*) 사원수,
-	   format(sum(salary), 0) 총급여,
-	   format(avg(salary), 0) 평균급여,
-	   format(max(salary), 0) 최대급여,
-	   format(min(salary), 0) 최소급여
+       count(*) 사원수,
+       format(sum(salary), 0) 총급여,
+       format(avg(salary), 0) 평균급여,
+       format(max(salary), 0) 최대급여,
+       format(min(salary), 0) 최소급여
 from employee
 group by left(hire_date, 4);
 
@@ -326,8 +326,8 @@ group by left(hire_date, 4);
 -- 부서의 총급여가 30000이상인 부서만 출력
 -- 급여 컬럼의 null은 제외
 select dept_id,
-	   format(sum(salary), 0) 총급여,
-	   format(avg(salary), 0) 평균급여
+       format(sum(salary), 0) 총급여,
+       format(avg(salary), 0) 평균급여
 from employee
 where salary is not null
 group by dept_id
@@ -338,11 +338,11 @@ having sum(salary) >= 30000;
 -- 총급여가 30000 이상인 년도 출력
 -- 급여 협상이 안된 사원은 제외 (salary가 null인 사원은 제외)
 select left(hire_date, 4) 연도,
-	   count(*) 사원수,
-	   format(sum(salary), 0) 총급여,
-	   format(avg(salary), 0) 평균급여,
-	   format(max(salary), 0) 최대급여,
-	   format(min(salary), 0) 최소급여
+       count(*) 사원수,
+       format(sum(salary), 0) 총급여,
+       format(avg(salary), 0) 평균급여,
+       format(max(salary), 0) 최대급여,
+       format(min(salary), 0) 최소급여
 from employee
 where salary is not null
 group by left(hire_date, 4)
@@ -358,18 +358,18 @@ having sum(salary) >= 30000;
 
 -- 부서별 사원수, 총급여, 평균급여 조회
 select dept_id 부서,
-	   count(*) 사원수,
-	   format(sum(ifnull(salary, 0)), 0) 총급여,
-	   format(avg(ifnull(salary, 0)), 0) 평균급여
+       count(*) 사원수,
+       format(sum(ifnull(salary, 0)), 0) 총급여,
+       format(avg(ifnull(salary, 0)), 0) 평균급여
 from employee
 group by dept_id with rollup;
 
 -- rollup한 결과의 부서 아이디를 추가
 -- 부서별 사원수, 총급여, 평균급여 조회
 select if(grouping(dept_id), '총합계', ifnull(dept_id, '-')) 부서명,
-	   count(*) 사원수,
-	   format(sum(ifnull(salary, 0)), 0) 총급여,
-	   format(avg(ifnull(salary, 0)), 0) 평균급여
+       count(*) 사원수,
+       format(sum(ifnull(salary, 0)), 0) 총급여,
+       format(avg(ifnull(salary, 0)), 0) 평균급여
 from employee
 group by dept_id with rollup;
 
@@ -379,11 +379,11 @@ group by dept_id with rollup;
 -- 급여 협상이 안된 사원은 제외 (salary가 null인 사원은 제외)
 -- select if(grouping(left(hire_date, 4)), '총합계', ifnull(dept_id, '-')) 연도, / 함수가 있기에 동작 안함, 사용 빈도가 낮아 버전 릴리즈에 반영되지 않음
 select left(hire_date, 4) 연도,
-	   count(*) 사원수,
-	   format(sum(salary), 0) 총급여,
-	   format(avg(salary), 0) 평균급여,
-	   format(max(salary), 0) 최대급여,
-	   format(min(salary), 0) 최소급여
+       count(*) 사원수,
+       format(sum(salary), 0) 총급여,
+       format(avg(salary), 0) 평균급여,
+       format(max(salary), 0) 최대급여,
+       format(min(salary), 0) 최소급여
 from employee
 where salary is not null
 group by left(hire_date, 4)
