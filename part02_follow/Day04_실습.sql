@@ -262,10 +262,10 @@ select emp_id, emp_name, salary, dept_id from employee where dept_id = (select d
 	양이 많아질수록 메모리 효율성 떨어짐
     
 	(1) 뷰 생성 : create view [view 이름]
-	                         as (SQL 정의);
+                             as (SQL 정의);
 	
 	(2) 뷰 삭제 : drop view [view 이름]
-	                       as (SQL 정의);
+                           as (SQL 정의);
     
 	** 뷰 생성시 권한을 할당 받아야 함 - mysql, maria 제외 (권한 할당 자동으로 되어 있음) > 권한 문제로 막아두는 경우도 있음
     
@@ -320,11 +320,11 @@ show tables;
 
 	테이블 생성
 	데이터 타입 : 정수형(int, long ...), 실수형(float, double), 문자형(char, varchar, longtext ...)
-	           이진데이터(longblob) 날짜형(date, datetime) ...
+               이진데이터(longblob) 날짜형(date, datetime) ...
 	char(고정형 문자형) : 크기가 메모리에 고정되는 형식
-	                   char(10) --> 3자리 입력 : 7자리 낭비
+                       char(10) --> 3자리 입력 : 7자리 낭비
 	varchar(가변형 문자형) : 실제 저장되는 데이터 크기에 따라메모리가 변경되는 형식 (너무 크면 동작 안함)
-	                      varchar(10) --> 3자리 입력 : 메모리 실제 3자리 공간만 생성
+                          varchar(10) --> 3자리 입력 : 메모리 실제 3자리 공간만 생성
 	longtext : 문장형태로 다수의 문자열을 저장
 	longblob : 이진데이터 타입의 이미지, 동영상 등 데이터 저장
 	date : 년, 월, 일
