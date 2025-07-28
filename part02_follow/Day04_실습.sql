@@ -21,13 +21,17 @@
 use hrdb2019;
 select database();
 show tables;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 정보시스템 부서명의 사원들을 모두 조회
--- 사번, 사원명, 부서아이디, 폰번호, 급여
--- 이너 조인으로 처리하면 복잡성이 증가하게 되어 이너 조인보다는 서브쿼리를 사용하게 됨
-select *					-- < 여기부터
-from employee
-where dept_id = '정보시스템';	-- > 여기까지 메인 쿼리 단위
+-- ㄴ 사번, 사원명, 부서아이디, 폰번호, 급여
+-- ** 이너 조인으로 처리하면 복잡성이 증가하게 되어 이너 조인보다는 서브쿼리를 사용하게 됨
+
+	select *					-- < 여기부터
+	from employee
+	where dept_id = '정보시스템';	-- > 여기까지 메인 쿼리 단위
 
 
 
@@ -39,12 +43,13 @@ where dept_id = '정보시스템';	-- > 여기까지 메인 쿼리 단위
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 정보시스템 부서명의 사원들을 모두 조회
--- 사번, 사원명, 부서아이디, 폰번호, 급여
-select emp_id, emp_name, dept_id, phone, salary
-from employee
-where dept_id = (select dept_id from department where dept_name = '정보시스템');
+-- ㄴ 사번, 사원명, 부서아이디, 폰번호, 급여
 
-select dept_id from department where dept_name = '정보시스템';
+	select emp_id, emp_name, dept_id, phone, salary
+	from employee
+	where dept_id = (select dept_id from department where dept_name = '정보시스템');
+
+	select dept_id from department where dept_name = '정보시스템';
 
 
 
@@ -56,14 +61,15 @@ select dept_id from department where dept_name = '정보시스템';
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 정보시스템 부서명의 사원들을 모두 조회
--- 사번, 사원명, 부서아이디, 부서명(부서테이블), 폰번호, 급여
-select emp_id, emp_name, dept_id,
-	   (select dept_name from department where dept_name = '정보시스템') as dept_name, -- 사용은 되지만 권장하지 않음
-	   phone, salary
-from employee
-where dept_id = (select dept_id from department where dept_name = '정보시스템');
+-- ㄴ 사번, 사원명, 부서아이디, 부서명(부서테이블), 폰번호, 급여
 
-select dept_name from department where dept_name = '정보시스템';
+	select emp_id, emp_name, dept_id,
+		   (select dept_name from department where dept_name = '정보시스템') as dept_name, -- 사용은 되지만 권장하지 않음
+		   phone, salary
+	from employee
+	where dept_id = (select dept_id from department where dept_name = '정보시스템');
+
+	select dept_name from department where dept_name = '정보시스템';
 
 
 
@@ -75,41 +81,60 @@ select dept_name from department where dept_name = '정보시스템';
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 홍길동 사원이 속한 부서명을 조회
-select dept_name 
-from department
-where dept_id = (select dept_id from employee where emp_name = '홍길동'); -- and나 or을 사용할 경우 다중행 서브쿼리 처리임
 
-select dept_id from employee where emp_name = '홍길동';
+	select dept_name 
+	from department
+	where dept_id = (select dept_id from employee where emp_name = '홍길동'); -- and나 or을 사용할 경우 다중행 서브쿼리 처리임
+
+	select dept_id from employee where emp_name = '홍길동';
+    
+-- -----------------------------------------------------------------------
 
 -- 홍길동 사원의 휴가사용 내역을 조회
-select *
-from vacation
-where emp_id = (select emp_id from employee where emp_name = '홍길동');
+
+	select *
+	from vacation
+	where emp_id = (select emp_id from employee where emp_name = '홍길동');
+    
+-- -----------------------------------------------------------------------
 
 -- 제3본부에 속한 모든 부서를 조회
-select *
-from department
-where unit_id = (select unit_id from unit where unit_name = '제3본부');
+
+	select *
+	from department
+	where unit_id = (select unit_id from unit where unit_name = '제3본부');
+    
+-- -----------------------------------------------------------------------
 
 -- 급여가 가장 높은 사원의 정보 조회
-select *
-from employee
-where salary = (select max(salary) as salary from employee);
+
+	select *
+	from employee
+	where salary = (select max(salary) as salary from employee);
+    
+-- -----------------------------------------------------------------------
 
 -- 급여가 가장 낮은 사원의 정보 조회
-select *
-from employee
-where salary = (select min(salary) as salary from employee);
+
+	select *
+	from employee
+	where salary = (select min(salary) as salary from employee);
+    
+-- -----------------------------------------------------------------------
 
 -- 가장 빨리 입사한 사원의 정보 조회
-select *
-from employee
-where hire_date = (select min(hire_date) as hire_date from employee);
+
+	select *
+	from employee
+	where hire_date = (select min(hire_date) as hire_date from employee);
+    
+-- -----------------------------------------------------------------------
 
 -- 가장 최근 입사한 사원의 정보 조회
-select *
-from employee
-where hire_date = (select max(hire_date) as hire_date from employee);
+
+	select *
+	from employee
+	where hire_date = (select max(hire_date) as hire_date from employee);
 
 
 
@@ -123,17 +148,19 @@ where hire_date = (select max(hire_date) as hire_date from employee);
 
 	select *
 	from employee
-	where dept_id = (select dept_id -- 단일행 출력인데 다중행을 가져오고 있어 에러 발생
-					 from department
-					 where unit_id = (select unit_id from unit where unit_name = '제3본부')
-	); -- 1번 처리 : 유닛 > 2번 처리 : 디파트먼트 > 3번 처리 : 임플로이
-
-	select *
-	from employee
 	where dept_id in (select dept_id
 					  from department
 					  where unit_id = (select unit_id from unit where unit_name = '제3본부')
 	); -- > select * from employee where dept_id in (a, b);
+    
+-- -----------------------------------------------------------------------
+
+	select *
+	from employee
+	where dept_id = (select dept_id -- 단일행 출력인데 다중행을 가져오고 있어 에러 발생
+					 from department
+					 where unit_id = (select unit_id from unit where unit_name = '제3본부')
+	); -- 1번 처리 : 유닛 > 2번 처리 : 디파트먼트 > 3번 처리 : 임플로이
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -185,8 +212,7 @@ where hire_date = (select max(hire_date) as hire_date from employee);
 	on e.emp_id = v.emp_id
 	order by duration desc;
     
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 -- ansi : inner join
 
@@ -206,8 +232,7 @@ where hire_date = (select max(hire_date) as hire_date from employee);
 	from employee
 	where left(hire_date, 4) between '2016' and '2017';
     
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 -- (2) 1번의 실행 결과와 vacation 테이블을 조인하여 휴가사용 내역 조회
 
@@ -227,8 +252,7 @@ where hire_date = (select max(hire_date) as hire_date from employee);
 	group by dept_id
 	having sum(salary) >= 30000;
     
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 -- (2) 1번의 실행 결과와 employee 테이블을 조인하여 사원아이디, 사원명, 급여, 부서아이디, 부서명, 부서별 총급여, 평균급여 조회
 
@@ -260,6 +284,8 @@ where hire_date = (select max(hire_date) as hire_date from employee);
 -- > 영업부 부서의 사원 ~ 부서아이디까지 가져오고 그 다음에 정부시스템 부서의 사원 ~ 부서아이디까지 가져와 합침
 
 	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업');
+    
+-- -----------------------------------------------------------------------
 
 	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
     
@@ -286,6 +312,8 @@ where hire_date = (select max(hire_date) as hire_date from employee);
 	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
 	union all
 	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
+    
+-- -----------------------------------------------------------------------
 
 	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
 	union
@@ -348,8 +376,7 @@ where table_schema = 'hrdb2019'; -- 현재 생성된 게 아무것도 없어서 
 	select *
 	from view_salary_sum;
     
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 -- (2) view_salary_sum 삭제
 
@@ -367,6 +394,7 @@ where table_schema = 'hrdb2019'; -- 현재 생성된 게 아무것도 없어서 
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 모든 테이블 목록
+
 show tables;
 
 
@@ -418,25 +446,21 @@ select * from employee;
 
 	desc emp;
     
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 -- (2) 테이블 삭제
 
 	show tables;
 	drop table emp;
     
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 -- (3) 테이블 복제 - view[가상의 테이블]와 달리 물리적[실제의 테이블]으로 생성됨
     
--- 	형식 ________________________________________________________________________________________________________________________________
+-- 	형식 __
     
 -- 	create table [테이블명]
 -- 	              as [SQL 정의]
-
--- __________________________________________________________________________________________________________________________________________
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -497,18 +521,28 @@ select * from employee;
 
 insert into emp(emp_id, ename, gender, hire_date, salary)
 	        values('s001', '홍길동', 'm', now(), '1000'); -- 정석적인 방식은 타입을 맞춰서 1:1 매핑 순서 준수해야 함
+    
+-- -----------------------------------------------------------------------
 
 insert into emp(ename, emp_id, gender, hire_date, salary)
 	        values('s001', '홍길동', 'm', now(), '1000'); -- 키 정의가 없어 중복된 내용이 들어갈 수 있음
+    
+-- -----------------------------------------------------------------------
 
 insert into emp(ename, emp_id, gender, salary, hire_date)
 	        values('s001', '홍길동', 'm', now(), '1000'); -- 데이트타임 타입과 인트 타입이 1:1 매핑이 되지 않아 에러 발생하는 케이스
+    
+-- -----------------------------------------------------------------------
 
 insert into emp(ename, emp_id, gender, salary, hire_date)
 	        values('s001', '홍길동', 'm', '1000'); -- 타입 개수와 값의 개수를 맞추지 않아 에러 발생하는 케이스
+    
+-- -----------------------------------------------------------------------
 
 insert into emp(ename, emp_id, gender, salary, hire_date)
 	        values('s001', '홍길동', 'm', '1000', null); -- desc emp 출력 후 null 값 정의 보면 YES로 되어 있어 null 값 들어감
+    
+-- -----------------------------------------------------------------------
 
 insert into emp(emp_id)
 	        values('s002'); -- null 허용 컬럼은 null 입력하지 않아도 디폴트로 자동으로 null이 들어감
@@ -547,16 +581,24 @@ create table emp(
 desc emp;
 insert into emp(emp_id, ename, gender, hire_date, salary)
 	        values('s001', '홍길동', 'm', now(), 1000); -- into 없이 insert만 입력해야하는 db 종류가 있고, into를 포함해야하는 db가 있음
-         
+    
+-- -----------------------------------------------------------------------
+
 insert into emp
 	        values('s002', '이순신', 'm', sysdate(), 2000); -- 빼고 진행할 수 있으나 넣고 진행하는 것을 추천
-         
+    
+-- -----------------------------------------------------------------------
+
 insert into emp -- 
 	        values(3000, 's003', '김유신', 'm', sysdate()); -- 지정된 입력 값 범위()를 벗어나 에러 발생하는 케이스
-         
+    
+-- -----------------------------------------------------------------------
+
 insert into emp -- 
 	        values('s003', null, 'm', sysdate(), 2000); -- null 비허용으로 에러 발생하는 케이스
-         
+    
+-- -----------------------------------------------------------------------
+
 insert into emp -- 
 	        values('s003', '김유신', 'm', sysdate(), 3000);
          
@@ -767,9 +809,8 @@ select * from emp;
 	-- truncate는 row 그 자체를 없애버려서 복구가 안됨, delete는 표시처리로 진행해 복구됨
 
 	rollback; -- 오토커밋은 대부분 비활성화(disable = false)가 디폴트임, mysql은 디폴트(enable = ture)가 활성화되어 롤백 동작안함, 실행시마다 트랜젝션이 완료, 완료 처리되고 있는 상태
-
     
--- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------
 
 -- s004 사원 삭제
 

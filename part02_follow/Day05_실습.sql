@@ -43,40 +43,46 @@ desc department;
 
 	show tables;
 	desc emp_const;
+    
+-- -----------------------------------------------------------------------
+
 	insert into emp_const(emp_id, emp_name, hire_date, salary)
 		values('s001', '홍길동', curdate(), 1000);
-		
+    
+-- -----------------------------------------------------------------------
+
 	insert into emp_const(emp_id, emp_name, hire_date, salary)
 		values('s001', '홍길동', curdate(), 1000); -- 중복되는 값으로 에러 발생
     
---
-		
+-- -----------------------------------------------------------------------
+
 	insert into emp_const(emp_id, emp_name, hire_date, salary)
 		values(null, '홍길동', curdate(), 1000); -- null이 들어갈 수 없는 조건 키이기 때문에 에러 발생
     
---
-		
+-- -----------------------------------------------------------------------
+
 	insert into emp_const(emp_id, emp_name, hire_date, salary)
 		values('s002', null, curdate(), 1000);  -- null이 들어갈 수 없는 조건 키이기 때문에 에러 발생
     
---
-		
+-- -----------------------------------------------------------------------
+
 	insert into emp_const(emp_id, emp_name, hire_date, salary)
 		values('s002', '홍길동', curdate(), 1000); -- 이름은 동일이름이 있을 수 있으므로 정상 등록 처리됨
     
---
-		
+-- -----------------------------------------------------------------------
+
 	insert into emp_const(emp_id, emp_name) -- 생략시 null 값이 자동으로 들어가 가능
 		values('s003', '이순신');
     
---
-		
+-- -----------------------------------------------------------------------
+
 	insert into emp_const(emp_id, emp_name, hire_date, salary) -- 그러나 개발시 일일히 찾아봐야 하는 경우가 발생하므로 1:1 매핑하는 식으로 작업하는 것을 추천
 		values('s004', '김유신', null, null);
 		
 	select * from emp_const;
     
---
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 	create table emp_const2(
 		emp_id		char(5),
@@ -86,12 +92,12 @@ desc department;
 		constraint	pk_emp_const2	primary key(emp_id) -- 워크벤치 버전에 따라 가능한 경우가 있고 불가한 경우가 있음, 현재 학습 버전에서는 등록됨
 	);
     
---
+-- -----------------------------------------------------------------------
 
 	select * from information_schema.table_constraints
 		where table_name = 'emp_const2'; -- 현재 학습 버전에서는 위의 pk_emp_const2가 등록은 되었으나 내부적으로 조회시 PRIMARY로 나옴
     
---
+-- -----------------------------------------------------------------------
 
 	insert into emp_const2(emp_id, emp_name, hire_date, salary)
 		values('s001', '홍길동', now(), 1000); -- curdate를 사용시 일 뒤 시분초는 안들어가나 now는 시분초까지 생성되고 나서 date 타입에 들어가기 때문에 효율성이 떨어져서 아웃풋 창에서 워닝으로 알려줌
@@ -252,13 +258,13 @@ desc department;
     
     select * from emp;
     
---
-    
+-- -----------------------------------------------------------------------
+
     insert emp(emp_id, emp_name, eng_name, gender, hire_date, retire_date, dept_id, phone, email, salary)
     values('S0002', '홍길동', null, 'M', curdate(), null, 'ABC', '010-1234-5678', 'hong@test.com', null); -- ABC 부서가 없기에 에러 발생
     
---
-    
+-- -----------------------------------------------------------------------
+
     insert emp(emp_id, emp_name, eng_name, gender, hire_date, retire_date, dept_id, phone, email, salary)
     values('S0002', '홍길동', null, 'M', curdate(), null, 'SYS', '010-1234-5678', 'hong@test.com', null);
     
@@ -270,18 +276,18 @@ desc department;
 
 	학사관리 시스템 설계
     
-    1. 과목(SUBJECT) 테이블은 
+    (1) 과목(SUBJECT) 테이블은 
 		컬럼 : SID(과목아이디), SNAME(과목명), SDATE(등록일:년월일 시분초)
 		SID는 기본키, 자동으로 생성한다.
         
-	2. 학생(STUDENT) 테이블은 반드시 하나 이상의 과목을 수강해야 한다. 
+	(2) 학생(STUDENT) 테이블은 반드시 하나 이상의 과목을 수강해야 한다. 
 		컬럼 : STID(학생아이디) 기본키, 자동생성
 	          SNAME(학생명) 널허용x,
 	          GENDER(성별)  문자1자 널허용x,
 	          SID(과목아이디),
 	          STDATE(등록일자) 년월일 시분초
             
-	3. 교수(PROFESSOR) 테이블은 반드시 하나 이상의 과목을 강의해야 한다.
+	(3) 교수(PROFESSOR) 테이블은 반드시 하나 이상의 과목을 강의해야 한다.
 		컬럼 : PID(교수아이디) 기본키, 자동생성
 	          NAME(교수명) 널허용x
 	          SID(과목아이디),
@@ -289,7 +295,7 @@ desc department;
     
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
--- 1. 과목 테이블 생성
+-- (1) 과목 테이블 생성
 
 	create table subject(
 		sid 	int 			primary key 	auto_increment,
@@ -299,10 +305,9 @@ desc department;
     
     drop table subject;
     
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
-    
--- 2. 학생 테이블 생성
+-- -----------------------------------------------------------------------
+
+-- (2) 학생 테이블 생성
 
 	create table student(
 		stid 	int 			primary key 	auto_increment,
@@ -319,10 +324,9 @@ desc department;
     
     drop table student;
     
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
-    
--- 3. 교수 테이블 생성
+-- -----------------------------------------------------------------------
+
+-- (3) 교수 테이블 생성
 
 	create table professor(
 		pid	 	int 			primary key 	auto_increment,
@@ -341,7 +345,7 @@ desc department;
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
     
--- 4. 테이블 제약 사항 확인
+-- 테이블 제약 사항 확인
 
 	select * from information_schema.table_constraints
 		where table_name in ('subject', 'student', 'professor');
@@ -351,7 +355,7 @@ desc department;
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
     
--- 5. 과목 데이터 추가
+-- (1) 과목 데이터 추가
 
 	insert into subject(sname, sdate) values('java', now());
 	insert into subject(sname, sdate) values('mysql', now());
@@ -361,10 +365,9 @@ desc department;
     
     select * from subject;
     
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
-    
--- 6. 학생 데이터 추가
+-- -----------------------------------------------------------------------
+
+-- (2) 학생 데이터 추가
 
 	insert into student(sname, gender, sid, stdate)
 		values('홍길동', 'm', 1, now());
@@ -379,10 +382,9 @@ desc department;
     
     select * from student;
     
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
-    
--- 7. 교수 데이터 추가
+-- -----------------------------------------------------------------------
+
+-- (3) 교수 데이터 추가
 
 	insert into professor(name, sid, pdate) values('스미스', 1, now());
 	insert into professor(name, sid, pdate) values('홍홍', 3, now());
@@ -408,7 +410,6 @@ desc department;
 		where st.sname ='홍길동';
 		
 	-- 서브쿼리 :
-        
 		select sname from subject
 		where sid = (select sid from student where sname = '홍길동');
     
@@ -453,6 +454,7 @@ desc department;
 -- java, 안중근 교수 추가
 
 	insert into professor(name, sid, pdate) values('안중근', 1 , now());
+    
     select * from professor;
     
     
@@ -517,18 +519,15 @@ desc department;
     alter table student
     add column kor decimal(7, 2) null;
     
---
-    
     alter table student
     add column eng decimal(7, 2) null;
-    
---
     
     alter table student
     add column math decimal(7, 2) null;
     
     desc student;
     
+-- -----------------------------------------------------------------------
 -- kor, eng, math 과목 컬럼 0점 입력
     
     update student
@@ -545,7 +544,7 @@ desc department;
 
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
--- 1. 테이블 생성 > 회원
+-- (1) 테이블 생성 > 회원
 
 	create table member(
 		member_id 		int 			primary key 	auto_increment,
@@ -556,9 +555,9 @@ desc department;
     
     drop table member;
     
---
+-- -----------------------------------------------------------------------
 
--- 2. 테이블 생성 > 상품
+-- (2) 테이블 생성 > 상품
 
 	create table product(
 		product_id 		int 			primary key 	auto_increment,
@@ -569,9 +568,9 @@ desc department;
     
     drop table product;
     
---
+-- -----------------------------------------------------------------------
 
--- 3. 테이블 생성 > 주문
+-- (3) 테이블 생성 > 주문
 
 	create table `order`(
 		order_id 		int 			primary key 	auto_increment,
@@ -584,9 +583,9 @@ desc department;
     
     drop table `order`;
     
---
+-- -----------------------------------------------------------------------
 
--- 4. 테이블 생성 > 주문 상세
+-- (4) 테이블 생성 > 주문 상세
 
 	create table orderitem(
 		order_item_id 	int 			primary key 	auto_increment,
@@ -605,7 +604,7 @@ desc department;
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
--- 1. 테이블 등록 > 회원
+-- (1) 테이블 등록 > 회원
 
 	show tables;
     
@@ -614,9 +613,9 @@ desc department;
     
 	select * from member;
     
---
+-- -----------------------------------------------------------------------
 
--- 2. 테이블 등록 > 상품
+-- (2) 테이블 등록 > 상품
 
 	desc product;
     
@@ -627,9 +626,9 @@ desc department;
               
 	select * from product;
     
---
+-- -----------------------------------------------------------------------
 
--- 3. 테이블 등록 > 주문
+-- (3) 테이블 등록 > 주문
 
 	show tables;
 	desc `order`;
@@ -644,9 +643,9 @@ desc department;
               
     select * from `order`;
     
---
+-- -----------------------------------------------------------------------
 
--- 4. 테이블 등록 > 주문 상세
+-- (4) 테이블 등록 > 주문 상세
 
 	show tables;
 	desc orderitem;
@@ -654,15 +653,15 @@ desc department;
     insert into orderitem(order_id, product_id, quantity, unit_price)
 		values(1, 1, 2, 1000),  -- 1번(member_id) 회원의 첫 번째(order_id 1) 주문 - 모니터 2개
 	          (1, 2, 3, 2000);  -- 1번(member_id) 회원의 첫 번째(order_id 1) 주문 - 키보드 3개
-
+    
 	insert into orderitem(order_id, product_id, quantity, unit_price)
 		values(2, 3, 2, 2500),  -- 1번(member_id) 회원의 두 번째(order_id 2) 주문 - 마우스 2개
 	          (2, 1, 3, 3000);  -- 1번(member_id) 회원의 두 번째(order_id 2) 주문 - 모니터 3개
-
+    
 	insert into orderitem(order_id, product_id, quantity, unit_price)
 		values(3, 2, 1, 2000),  -- 2번(member_id) 회원의 첫 번째(order_id 3) 주문 - 키보드 1개
 	          (3, 3, 1, 3000);  -- 2번(member_id) 회원의 첫 번째(order_id 3) 주문 - 마우스 1개
-
+    
 	insert into orderitem(order_id, product_id, quantity, unit_price)
 		values(4, 1, 2, 1000),  -- 2번(member_id) 회원의 두 번째(order_id 4) 주문 - 모니터 2개
 	          (4, 2, 1, 2000);  -- 2번(member_id) 회원의 두 번째(order_id 4) 주문 - 키보드 1개
@@ -707,7 +706,7 @@ desc department;
 		group by p.name
 		order by count;
     
---
+-- -----------------------------------------------------------------------
 
 -- 테이블 등록 > 상품 추가
 
@@ -720,8 +719,8 @@ desc department;
               
 	select * from product;
     
---
-    
+-- -----------------------------------------------------------------------
+
 -- 상품별 주문 건수(수량), 모든 상품 조회(주문이 없는 상품도 포함) - 아우터 조인은 ansi 방식으로만 동작하므로 ansi 방식으로만 진행
 
 	-- ansi 방식의 조인 : -- 자격증에서는 이 방식을 알아야 함

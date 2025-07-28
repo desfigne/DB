@@ -28,15 +28,21 @@ SHOW TABLES;
 
 -- (1) abs(숫자) : 절대값
 select abs(100), abs(-100) from dual;
+    
+-- -----------------------------------------------------------------------
 
 -- (2) floor(숫자), truncate(숫자, 자리수) : 소수점 버리기
 select floor(123.456), truncate(123.456, 0), truncate(123.456, 1) from dual;
+    
+-- -----------------------------------------------------------------------
 
 -- 사원테이블의 sys부서 사원들의 사원명, 부서아이디, 폰번호, 급여, 보너스(급여의 25%) 컬럼을 추가하여 조회
 select emp_name, emp_id, phone, salary, salary*0.25 as bonus from employee where dept_id = 'sys';
 
 -- 보너스 컬럼은 소수점 1자리로 출력
 select emp_name, emp_id, phone, salary, truncate(salary*0.25, 1) as bonus from employee where dept_id = 'sys';
+    
+-- -----------------------------------------------------------------------
 
 -- (3) RAND() : 임의의 수를 난수로 발생시키는 함수이며 0 ~ 1 사이의 난수를 생성 (RAND : 랜덤의 약자)
 select rand() from dual;
@@ -44,6 +50,8 @@ select floor(rand() * 1000) as randnumber from dual; -- 정수 3자리(0 ~ 999) 
 
 -- 정수 4자리(0 ~ 9999) 난수 발생, 소수점 2자리
 select truncate(rand() * 10000, 2) as randnumber from dual;
+    
+-- -----------------------------------------------------------------------
 
 -- (4) mod(숫자, 나누는 수) : 나머지 함수
 select mod(123, 2) as odd, mod(124, 2) as even from dual;
@@ -230,62 +238,81 @@ select * from employee where hire_date between '20150101' and '20171231';
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- (1) sum(숫자) : 전체 총합을 구하는 함수
--- 사원들 전체의 급여 총액을 조회, 3자리 구분, 마지막 '만원' 추가 표시
-select concat(format(sum(salary),0), '만원') as 총급여 from employee;
 
--- select emp_id, sum(salary) from employee; / 함께 사용 불가
--- select emp_id, sum(salary) from employee group by emp_id; / 유니크한 항목에는 그룹핑이 안되므로 의미가 없음
+	-- 사원들 전체의 급여 총액을 조회, 3자리 구분, 마지막 '만원' 추가 표시
+	select concat(format(sum(salary),0), '만원') as 총급여 from employee;
+
+	-- select emp_id, sum(salary) from employee; / 함께 사용 불가
+	-- select emp_id, sum(salary) from employee group by emp_id; / 유니크한 항목에는 그룹핑이 안되므로 의미가 없음
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (2) avg(숫자) : 전체 평균을 구하는 함수
--- 사원들 전체의 급여 평균을 조회, 3자리 구분, 앞에 '$' 표시
--- 소수점은 절삭
-select floor(avg(salary)) as 평균급여 from employee;
-select format(avg(salary), 0) as 평균급여 from employee;
-select concat('$', format(avg(salary), 0)) as 평균급여 from employee;
 
--- 정보시스템(sys) 부서 전체의 급여 총액과 평균을 조회
--- 3자리 구분, 마지막 '만원' 표시
-select concat(format(sum(salary), 0), '만원') as 평균급여, concat(format(avg(salary), 0), '만원') as 총급여 from employee where dept_id = 'sys';
+	-- 사원들 전체의 급여 평균을 조회, 3자리 구분, 앞에 '$' 표시
+	-- ㄴ 소수점은 절삭
+    
+	select floor(avg(salary)) as 평균급여 from employee;
+	select format(avg(salary), 0) as 평균급여 from employee;
+	select concat('$', format(avg(salary), 0)) as 평균급여 from employee;
+
+	-- 정보시스템(sys) 부서 전체의 급여 총액과 평균을 조회
+	-- ㄴ 3자리 구분, 마지막 '만원' 표시
+    
+	select concat(format(sum(salary), 0), '만원') as 평균급여, concat(format(avg(salary), 0), '만원') as 총급여 from employee where dept_id = 'sys';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (3) max(숫자) : 최대값 구하는 함수
--- 가장 높은 급여를 받는 사원의 급여를 조회
-select max(salary) from employee;
+
+	-- 가장 높은 급여를 받는 사원의 급여를 조회
+	select max(salary) from employee;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (4) min(숫자) : 최소값 구하는 함수
--- 가장 낮은 급여를 받는 사원의 급여를 조회
-select min(salary) from employee;
 
--- 사원들의 총급여, 평균급여, 최대급여, 최소급여를 조회
--- 3자리 구분
-select format(sum(salary), 0) as 총급여,
-       format(avg(salary), 0) as 평균급여,
-       format(max(salary), 0) as 최대급여,
-       format(min(salary), 0) as 최소급여
-from employee;
+	-- 가장 낮은 급여를 받는 사원의 급여를 조회
+	select min(salary) from employee;
+
+	-- 사원들의 총급여, 평균급여, 최대급여, 최소급여를 조회
+	-- 3자리 구분
+	select format(sum(salary), 0) as 총급여,
+		   format(avg(salary), 0) as 평균급여,
+		   format(max(salary), 0) as 최대급여,
+		   format(min(salary), 0) as 최소급여
+	from employee;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (5) count(컬럼) : 조건에 맞는 데이터의 row 수를 조회, null은 제외
--- 전체 로우 수
-select count(*) from employee; -- 20
 
--- 급여 컬럼의 row count
-select count(salary) from employee; -- 19, null은 카운트에서 제외됨
+	-- 전체 로우 수
+	select count(*) from employee; -- 20
 
--- 재직중인 사원의 row count
-select count(hire_date) as 재직사원 from employee where retire_date is null;
-select count(*) as 재직사원 from employee where retire_date is null;
-select count(*) as 총사원, count(retire_date) as 퇴사자, count(*) - count(retire_date) as 재직자 from employee;
+	-- 급여 컬럼의 row count
+	select count(salary) from employee; -- 19, null은 카운트에서 제외됨
 
--- '2015'년도 입사자 수
-select count(*) from employee where left(hire_date, 4) = '2015';
+	-- 재직중인 사원의 row count
+	select count(hire_date) as 재직사원 from employee where retire_date is null;
+	select count(*) as 재직사원 from employee where retire_date is null;
+	select count(*) as 총사원, count(retire_date) as 퇴사자, count(*) - count(retire_date) as 재직자 from employee;
 
--- 정보시스템(sys) 부서의 사원수
-select count(*) from employee where dept_id = 'sys';
+	-- '2015'년도 입사자 수
+	select count(*) from employee where left(hire_date, 4) = '2015';
 
--- 가장 빠른 입사자, 가장 늦은 입사자를 조회 : max(), min() 함수를 사용
-select min(hire_date), max(hire_date) from employee;
+	-- 정보시스템(sys) 부서의 사원수
+	select count(*) from employee where dept_id = 'sys';
 
--- 가장 빨리 입사한 사람의 정보를 조회 - 서브 쿼리로 그룹 함수 사용, 쿼리 함수중 서브 쿼리 함수를 제일 주로 씀
-select * from employee where hire_date = (select min(hire_date) from employee);
+	-- 가장 빠른 입사자, 가장 늦은 입사자를 조회 : max(), min() 함수를 사용
+	select min(hire_date), max(hire_date) from employee;
+
+	-- 가장 빨리 입사한 사람의 정보를 조회 - 서브 쿼리로 그룹 함수 사용, 쿼리 함수중 서브 쿼리 함수를 제일 주로 씀
+	select * from employee where hire_date = (select min(hire_date) from employee);
 
 
 
@@ -297,19 +324,27 @@ select * from employee where hire_date = (select min(hire_date) from employee);
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 부서별 총급여, 평균급여, 사원수, 최대급여, 최소급여 조회
-select dept_id, sum(salary), avg(salary), count(*), max(salary), min(salary) from employee group by dept_id;
--- select ~ from ~ where 까지는 한 그룹임, 그 이후 그룹 바이를 붙임
+
+	select dept_id, sum(salary), avg(salary), count(*), max(salary), min(salary) from employee group by dept_id;
+	-- select ~ from ~ where 까지는 한 그룹임, 그 이후 그룹 바이를 붙임
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 연도별 사원수, 총급여, 평균급여, 최대급여, 최소급여 조회
--- 소수점 X, 3자리 구분
-select left(hire_date, 4) 연도,
-       count(*) 사원수,
-       format(sum(salary), 0) 총급여,
-       format(avg(salary), 0) 평균급여,
-       format(max(salary), 0) 최대급여,
-       format(min(salary), 0) 최소급여
-from employee
-group by left(hire_date, 4);
+-- ㄴ 소수점 X, 3자리 구분
+
+	select left(hire_date, 4) 연도,
+		   count(*) 사원수,
+		   format(sum(salary), 0) 총급여,
+		   format(avg(salary), 0) 평균급여,
+		   format(max(salary), 0) 최대급여,
+		   format(min(salary), 0) 최소급여
+	from employee
+	group by left(hire_date, 4);
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 사원별 총급여, 평균급여 조회 / 사원 각각의 row가 나오기 때문에 그룹 바이는 효과가 없음
 
@@ -323,30 +358,35 @@ group by left(hire_date, 4);
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 부서별 총급여, 평균급여를 조회
--- 부서의 총급여가 30000이상인 부서만 출력
--- 급여 컬럼의 null은 제외
-select dept_id,
-       format(sum(salary), 0) 총급여,
-       format(avg(salary), 0) 평균급여
-from employee
-where salary is not null
-group by dept_id
-having sum(salary) >= 30000;
+-- ㄴ 부서의 총급여가 30000이상인 부서만 출력
+-- ㄴ 급여 컬럼의 null은 제외
+
+	select dept_id,
+		   format(sum(salary), 0) 총급여,
+		   format(avg(salary), 0) 평균급여
+	from employee
+	where salary is not null
+	group by dept_id
+	having sum(salary) >= 30000;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 연도별 사원수, 총급여, 평균급여, 최대급여, 최소급여 조회
--- 소수점 X, 3자리 구분
--- 총급여가 30000 이상인 년도 출력
--- 급여 협상이 안된 사원은 제외 (salary가 null인 사원은 제외)
-select left(hire_date, 4) 연도,
-       count(*) 사원수,
-       format(sum(salary), 0) 총급여,
-       format(avg(salary), 0) 평균급여,
-       format(max(salary), 0) 최대급여,
-       format(min(salary), 0) 최소급여
-from employee
-where salary is not null
-group by left(hire_date, 4)
-having sum(salary) >= 30000;
+-- ㄴ 소수점 X, 3자리 구분
+-- ㄴ 총급여가 30000 이상인 년도 출력
+-- ㄴ 급여 협상이 안된 사원은 제외 (salary가 null인 사원은 제외)
+
+	select left(hire_date, 4) 연도,
+		   count(*) 사원수,
+		   format(sum(salary), 0) 총급여,
+		   format(avg(salary), 0) 평균급여,
+		   format(max(salary), 0) 최대급여,
+		   format(min(salary), 0) 최소급여
+	from employee
+	where salary is not null
+	group by left(hire_date, 4)
+	having sum(salary) >= 30000;
 
 
 
@@ -357,37 +397,46 @@ having sum(salary) >= 30000;
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 부서별 사원수, 총급여, 평균급여 조회
-select dept_id 부서,
-       count(*) 사원수,
-       format(sum(ifnull(salary, 0)), 0) 총급여,
-       format(avg(ifnull(salary, 0)), 0) 평균급여
-from employee
-group by dept_id with rollup;
+
+	select dept_id 부서,
+		   count(*) 사원수,
+		   format(sum(ifnull(salary, 0)), 0) 총급여,
+		   format(avg(ifnull(salary, 0)), 0) 평균급여
+	from employee
+	group by dept_id with rollup;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- rollup한 결과의 부서 아이디를 추가
--- 부서별 사원수, 총급여, 평균급여 조회
-select if(grouping(dept_id), '총합계', ifnull(dept_id, '-')) 부서명,
-       count(*) 사원수,
-       format(sum(ifnull(salary, 0)), 0) 총급여,
-       format(avg(ifnull(salary, 0)), 0) 평균급여
-from employee
-group by dept_id with rollup;
+-- ㄴ 부서별 사원수, 총급여, 평균급여 조회
+
+	select if(grouping(dept_id), '총합계', ifnull(dept_id, '-')) 부서명,
+		   count(*) 사원수,
+		   format(sum(ifnull(salary, 0)), 0) 총급여,
+		   format(avg(ifnull(salary, 0)), 0) 평균급여
+	from employee
+	group by dept_id with rollup;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 연도별 사원수, 총급여, 평균급여, 최대급여, 최소급여 조회
--- 소수점 X, 3자리 구분
--- 총급여가 30000 이상인 년도 출력
--- 급여 협상이 안된 사원은 제외 (salary가 null인 사원은 제외)
--- select if(grouping(left(hire_date, 4)), '총합계', ifnull(dept_id, '-')) 연도, / 함수가 있기에 동작 안함, 사용 빈도가 낮아 버전 릴리즈에 반영되지 않음
-select left(hire_date, 4) 연도,
-       count(*) 사원수,
-       format(sum(salary), 0) 총급여,
-       format(avg(salary), 0) 평균급여,
-       format(max(salary), 0) 최대급여,
-       format(min(salary), 0) 최소급여
-from employee
-where salary is not null
-group by left(hire_date, 4)
-having sum(salary) >= 30000;
+-- ㄴ 소수점 X, 3자리 구분
+-- ㄴ 총급여가 30000 이상인 년도 출력
+-- ㄴ 급여 협상이 안된 사원은 제외 (salary가 null인 사원은 제외)
+-- ㄴ select if(grouping(left(hire_date, 4)), '총합계', ifnull(dept_id, '-')) 연도, / 함수가 있기에 동작 안함, 사용 빈도가 낮아 버전 릴리즈에 반영되지 않음
+
+	select left(hire_date, 4) 연도,
+		   count(*) 사원수,
+		   format(sum(salary), 0) 총급여,
+		   format(avg(salary), 0) 평균급여,
+		   format(max(salary), 0) 최대급여,
+		   format(min(salary), 0) 최소급여
+	from employee
+	where salary is not null
+	group by left(hire_date, 4)
+	having sum(salary) >= 30000;
 
 
 
@@ -400,8 +449,9 @@ having sum(salary) >= 30000;
 select * from employee limit 3;
 
 -- 최대급여를 수급하는 사원을 순서대로 5명까지 출력
-select * from employee order by salary desc limit 5;
--- mysql에만 limit 개념이 있고 다른 db에는 리미트가 없어 다른 방식으로 처리
+
+	select * from employee order by salary desc limit 5;
+	-- mysql에만 limit 개념이 있고 다른 db에는 리미트가 없어 다른 방식으로 처리
 
 
 
