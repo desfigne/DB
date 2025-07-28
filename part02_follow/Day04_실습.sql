@@ -120,30 +120,35 @@ where hire_date = (select max(hire_date) as hire_date from employee);
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- '제3본부'에 속한 모든 사원 정보 조회
-select *
-from employee
-where dept_id = (select dept_id -- 단일행 출력인데 다중행을 가져오고 있어 에러 발생
-	             from department
-	             where unit_id = (select unit_id from unit where unit_name = '제3본부')
-); -- 1번 처리 : 유닛 > 2번 처리 : 디파트먼트 > 3번 처리 : 임플로이
 
-select *
-from employee
-where dept_id in (select dept_id
-	              from department
-	              where unit_id = (select unit_id from unit where unit_name = '제3본부')
-); -- > select * from employee where dept_id in (a, b);
+	select *
+	from employee
+	where dept_id = (select dept_id -- 단일행 출력인데 다중행을 가져오고 있어 에러 발생
+					 from department
+					 where unit_id = (select unit_id from unit where unit_name = '제3본부')
+	); -- 1번 처리 : 유닛 > 2번 처리 : 디파트먼트 > 3번 처리 : 임플로이
+
+	select *
+	from employee
+	where dept_id in (select dept_id
+					  from department
+					  where unit_id = (select unit_id from unit where unit_name = '제3본부')
+	); -- > select * from employee where dept_id in (a, b);
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- '제3본부'에 속한 모든 사원들의 휴가 사용 내역 조회
-select *
-from vacation
-where emp_id in (select emp_id
-				 from employee
-				 where dept_id in (select dept_id
-	                               from department
-	                               where unit_id = (select unit_id from unit where unit_name = '제3본부')
-	                               )
-);
+
+	select *
+	from vacation
+	where emp_id in (select emp_id
+					 from employee
+					 where dept_id in (select dept_id
+									   from department
+									   where unit_id = (select unit_id from unit where unit_name = '제3본부')
+									   )
+	);
 
 
 
@@ -155,58 +160,85 @@ where emp_id in (select emp_id
 
 -- 사원별 휴가사용 일수를 그룹핑하여 사원아이디, 사원명, 입사일, 연봉, 휴가사용일수를 조회
 -- 휴가를 사용한 사원정보만
-select e.emp_id, e.emp_name, e.hire_date, e.salary, v.duration
-from employee e, (select emp_id, sum(duration) as duration
-	              from vacation
-	              group by emp_id) v -- 별칭 붙이지 않으면 에러 발생, 별칭 꼭 추가
-where e.emp_id = v.emp_id;
 
--- 휴가를 사용 + 사용하지 않은 사원정보 모두 포함
--- 휴가를 사용하지 않은 사원은 기본값 0
--- 사용일수 기준 내림차순 정렬
+	select e.emp_id, e.emp_name, e.hire_date, e.salary, v.duration
+	from employee e, (select emp_id, sum(duration) as duration
+					  from vacation
+					  group by emp_id) v -- 별칭 붙이지 않으면 에러 발생, 별칭 꼭 추가
+	where e.emp_id = v.emp_id;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+-- 사원별 휴가사용 일수를 그룹핑하여 사원아이디, 사원명, 입사일, 연봉, 휴가사용일수를 조회
+-- ㄴ 휴가를 사용 + 사용하지 않은 사원정보 모두 포함
+-- ㄴ 휴가를 사용하지 않은 사원은 기본값 0
+-- ㄴ 사용일수 기준 내림차순 정렬
+
 -- left outer join
-select e.emp_id, e.emp_name, e.hire_date, e.salary, ifnull(v.duration, 0) as duration
-from employee e
-	 left outer join (select emp_id, sum(duration) as duration
-	                  from vacation
-	                  group by emp_id) v
-on e.emp_id = v.emp_id
-order by duration desc;
+
+	select e.emp_id, e.emp_name, e.hire_date, e.salary, ifnull(v.duration, 0) as duration
+	from employee e
+		 left outer join (select emp_id, sum(duration) as duration
+						  from vacation
+						  group by emp_id) v
+	on e.emp_id = v.emp_id
+	order by duration desc;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- ansi : inner join
-select e.emp_id, e.emp_name, e.hire_date, e.salary, ifnull(v.duration, 0) as duration
-from employee e
-	 inner join (select emp_id, sum(duration) as duration
-	             from vacation
-	             group by emp_id) v
-on e.emp_id = v.emp_id;
+
+	select e.emp_id, e.emp_name, e.hire_date, e.salary, ifnull(v.duration, 0) as duration
+	from employee e
+		 inner join (select emp_id, sum(duration) as duration
+					 from vacation
+					 group by emp_id) v
+	on e.emp_id = v.emp_id;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (1) 2016년도부터 2017년도까지 입사한 사원들 조회
-select *
-from employee
-where left(hire_date, 4) between '2016' and '2017';
+
+	select *
+	from employee
+	where left(hire_date, 4) between '2016' and '2017';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (2) 1번의 실행 결과와 vacation 테이블을 조인하여 휴가사용 내역 조회
-select *
-from vacation v, (select *
-	              from employee
-	              where left(hire_date, 4) between '2016' and '2017') e
-where v.emp_id = e.emp_id;
+
+	select *
+	from vacation v, (select *
+					  from employee
+					  where left(hire_date, 4) between '2016' and '2017') e
+	where v.emp_id = e.emp_id;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (1) 부서별 총급여, 평균급여를 구하여 30000 이상인 부서 조회
-select dept_id, sum(salary) as sum, avg(salary) as avg
-from employee
-group by dept_id
-having sum(salary) >= 30000;
+
+	select dept_id, sum(salary) as sum, avg(salary) as avg
+	from employee
+	group by dept_id
+	having sum(salary) >= 30000;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (2) 1번의 실행 결과와 employee 테이블을 조인하여 사원아이디, 사원명, 급여, 부서아이디, 부서명, 부서별 총급여, 평균급여 조회
-select e.emp_id, e.emp_name, e.salary, e.dept_id, d.dept_name, t.sum, t.avg
-from employee e,
-	 department d, (select dept_id, sum(salary) as sum, avg(salary) as avg
-	                from employee
-	                group by dept_id
-	                having sum(salary) >= 30000) t
-where e.dept_id = d.dept_id and d.dept_id = t.dept_id;
+
+	select e.emp_id, e.emp_name, e.salary, e.dept_id, d.dept_name, t.sum, t.avg
+	from employee e,
+		 department d, (select dept_id, sum(salary) as sum, avg(salary) as avg
+						from employee
+						group by dept_id
+						having sum(salary) >= 30000) t
+	where e.dept_id = d.dept_id and d.dept_id = t.dept_id;
 
 
 
@@ -226,33 +258,44 @@ where e.dept_id = d.dept_id and d.dept_id = t.dept_id;
 
 -- 영업부, 정보시스템 부서의 사원아이디, 사원명, 급여, 부서아이디 조회
 -- > 영업부 부서의 사원 ~ 부서아이디까지 가져오고 그 다음에 정부시스템 부서의 사원 ~ 부서아이디까지 가져와 합침
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업');
 
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업');
 
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+-- 영업부, 정보시스템 부서의 사원아이디, 사원명, 급여, 부서아이디 조회
 -- > union : 중복되는 row를 제외하고 출력 > 영업 부서 사원들이 한번만 출력
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
-union
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
-union
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
 
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+	union
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+	union
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+-- 영업부, 정보시스템 부서의 사원아이디, 사원명, 급여, 부서아이디 조회
 -- > union : 중복되는 row를 포함하고 출력 > 영업 부서 사원들이 중복되어 출력
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
-union all
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
-union all
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
 
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
-union
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
-union
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
-union all
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템')
-union
-select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+	union all
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+	union all
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
+
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+	union
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+	union
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+	union all
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템')
+	union
+	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
 
 
 
@@ -277,30 +320,42 @@ from information_schema.views; -- 내부 정보 관리하는 주체
 select *
 from information_schema.views
 where table_schema = 'hrdb2019'; -- 현재 생성된 게 아무것도 없어서 내용은 출력되지 않음 / 아래 부서 총급여 가상의 테이블 생성후 재조회시 내용 출력
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 부서 총급여가 30000 이상인 테이블
-create view view_salary_sum
-as
-select e.emp_id, e.emp_name, e.salary, e.dept_id, d.dept_name, t.sum, t.avg
-from employee e,
-	 department d, (select dept_id, sum(salary) as sum, avg(salary) as avg
-	                from employee
-	                group by dept_id
-	                having sum(salary) >= 30000) t
-where e.dept_id = d.dept_id and d.dept_id = t.dept_id;
 
-select *
-from information_schema.views
-where table_schema = 'hrdb2019'; -- 위의 부서 총급여 가상의 테이블 생성후 재조회시 내용 출력
+	create view view_salary_sum
+	as
+	select e.emp_id, e.emp_name, e.salary, e.dept_id, d.dept_name, t.sum, t.avg
+	from employee e,
+		 department d, (select dept_id, sum(salary) as sum, avg(salary) as avg
+						from employee
+						group by dept_id
+						having sum(salary) >= 30000) t
+	where e.dept_id = d.dept_id and d.dept_id = t.dept_id;
+
+	select *
+	from information_schema.views
+	where table_schema = 'hrdb2019'; -- 위의 부서 총급여 가상의 테이블 생성후 재조회시 내용 출력
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (1) view_salary_sum 실행 / 쿼리가 확 줄어듬
-select *
-from view_salary_sum;
+
+	select *
+	from view_salary_sum;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (2) view_salary_sum 삭제
-drop view view_salary_sum;
-select * from information_schema.views
-where table_schema = 'hrdb2019';
+
+	drop view view_salary_sum;
+	select * from information_schema.views
+	where table_schema = 'hrdb2019';
 
 
 
@@ -342,26 +397,37 @@ show tables;
 
 desc employee;
 select * from employee;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (1) 테이블 생성
 -- emp_id : (char, 4), ename " (varchar, 10), gender : (char, 1), hire_date : (datetime), salary: (int)
-show tables;
-create table emp(
-	emp_id		char(4),
-	ename		varchar(10),
-	gender		char(4),
-	hire_date	datetime,
-	salary		int
-);
 
-select * from information_schema.tables
-where table_schema = 'hrdb2019';
+	show tables;
+	create table emp(
+		emp_id		char(4),
+		ename		varchar(10),
+		gender		char(4),
+		hire_date	datetime,
+		salary		int
+	);
 
-desc emp;
+	select * from information_schema.tables
+	where table_schema = 'hrdb2019';
+
+	desc emp;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (2) 테이블 삭제
-show tables;
-drop table emp;
+
+	show tables;
+	drop table emp;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (3) 테이블 복제 - view[가상의 테이블]와 달리 물리적[실제의 테이블]으로 생성됨
     
@@ -371,24 +437,32 @@ drop table emp;
 -- 	              as [SQL 정의]
 
 -- __________________________________________________________________________________________________________________________________________
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- employee 테이블을 복제하여 emp 테이블 생성
-create table emp
-as
-select * from employee;
 
-show tables;
-select * from emp;
-desc employee;
-desc emp;
+	create table emp
+	as
+	select * from employee;
+
+	show tables;
+	select * from emp;
+	desc employee;
+	desc emp;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 2016년도에 입사한 사원의 정보를 복제 : employee_2016
-create table employee_2016
-as
-select * from employee where left(hire_date, 4) = '2016';
 
-show tables;
-select * from employee_2016; -- 복제는 보통 테스트를 위해 사용됨
+	create table employee_2016
+	as
+	select * from employee where left(hire_date, 4) = '2016';
+
+	show tables;
+	select * from employee_2016; -- 복제는 보통 테스트를 위해 사용됨
 
 
 
@@ -406,6 +480,9 @@ select * from employee_2016; -- 복제는 보통 테스트를 위해 사용됨
 show tables;
 drop table emp;
 show tables;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 create table emp(
 	emp_id		char(4),
@@ -455,6 +532,9 @@ select * from emp;
 show tables;
 drop table emp;
 show tables;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 create table emp(
 	emp_id		char(4)			not null,
@@ -525,46 +605,62 @@ select * from emp2;
 
 show tables;
 select * from emp;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- phone(char, 13) 컬럼 추가, null 허용 (데이터가 없는 상태면 상관없음)
-alter table emp
-	        add column phone char(13) not null; -- 오라클은 add만 입력, 컬럼은 생략됨, 데이터가 없는데 넣으려고 하면 오라클은 에러나며 진행안됨
 
-desc emp;
-select * from emp;
+	alter table emp
+				add column phone char(13) not null; -- 오라클은 add만 입력, 컬럼은 생략됨, 데이터가 없는데 넣으려고 하면 오라클은 에러나며 진행안됨
+
+	desc emp;
+	select * from emp;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- phone 컬럼 삭제
-alter table emp
-	        drop column phone;
-    
-select * from emp;
 
-alter table emp
-	        add column phone char(13) null;
-    
-desc emp;
-select * from emp;
+	alter table emp
+				drop column phone;
+		
+	select * from emp;
 
-insert into emp
-	        values('s004', '홍홍', 'f', now(), 4000, '010-1234-5678');
+	alter table emp
+				add column phone char(13) null;
+		
+	desc emp;
+	select * from emp;
+
+	insert into emp
+				values('s004', '홍홍', 'f', now(), 4000, '010-1234-5678');
+		
+	select * from emp;
     
-select * from emp;
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- phone 컬럼의 크기 변경 : char(13) -> char(10)
-alter table emp
-	        modify column phone char(10) null; -- 저장된 데이터보다 크기가 작으면 에러 발생, 데이터 유실 위험 발생으로 진행 안됨
-    
-alter table emp
-	        modify column phone char(20) null; -- 크기가 커지는건 가능함
-    
-desc emp;
 
-alter table emp
-	        modify column phone char(13) null;
+	alter table emp
+				modify column phone char(10) null; -- 저장된 데이터보다 크기가 작으면 에러 발생, 데이터 유실 위험 발생으로 진행 안됨
+		
+	alter table emp
+				modify column phone char(20) null; -- 크기가 커지는건 가능함
+		
+	desc emp;
+
+	alter table emp
+				modify column phone char(13) null;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- phone 컬럼 삭제
-alter table emp
-	        drop column phone;
+
+	alter table emp
+				drop column phone;
 
 
 
@@ -584,50 +680,62 @@ alter table emp
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 select * from emp;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 홍길동의 급여를 6000으로 수정
-update emp
-	   set salary = 6000; -- 이렇게 주면 전원이 다 바뀜
 
-update emp
-	   set salary = 6000
-	   where emp_id = 's001'; -- 업데이트 불가 에러 발생
+	update emp
+		   set salary = 6000; -- 이렇게 주면 전원이 다 바뀜
+
+	update emp
+		   set salary = 6000
+		   where emp_id = 's001'; -- 업데이트 불가 에러 발생
+		
+	set sql_safe_updates = 0; -- 업데이트 보호모드 해제 / 워크벤치 실행시마다 초기화되어 보호모드 자동 실행됨, 릴리즈 버전마다 달라질 수 있음
+
+	update emp
+		   set salary = 6000
+		   where emp_id = 's001';
+
+	select * from emp;
     
-set sql_safe_updates = 0; -- 업데이트 보호모드 해제 / 워크벤치 실행시마다 초기화되어 보호모드 자동 실행됨, 릴리즈 버전마다 달라질 수 있음
-
-update emp
-	   set salary = 6000
-	   where emp_id = 's001';
-
-select * from emp;
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 김유신의 입사날짜를 '20210725'로 수정
-update emp
--- 	   set hire_date = '20210725' -- 문자열인 내용이 데이터타입 데이트로 바꿔야 하나 자동 변환되어 바로 진행됨
--- 	   set hire_date = cast('20210725', datetime) -- 오라클은 무조건 ,로 구분하나 mysql에서는 동작안함
-	   set hire_date = cast('20210725' as datetime)
-	   where emp_id = 's003';
 
-select * from emp;
+	update emp
+	-- 	   set hire_date = '20210725' -- 문자열인 내용이 데이터타입 데이트로 바꿔야 하나 자동 변환되어 바로 진행됨
+	-- 	   set hire_date = cast('20210725', datetime) -- 오라클은 무조건 ,로 구분하나 mysql에서는 동작안함
+		   set hire_date = cast('20210725' as datetime)
+		   where emp_id = 's003';
+
+	select * from emp;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- emp2 테이블에 retire_date 컬럼추가 : date, null 허용으로 추가
--- 기존 데이터는 현재 날짜로 업데이트
--- 업데이트 완료 후 retire_date의 설정을 'not null'로 변경
-alter table emp2
-	        add column retire_date date null;
-    
-update emp2
-	   set retire_date = curdate()
-	   where retire_date is null;
+-- ㄴ 기존 데이터는 현재 날짜로 업데이트
+-- ㄴ 업데이트 완료 후 retire_date의 설정을 'not null'로 변경
 
-select * from emp2;
-    
-desc emp2;
-alter table emp2
-	        modify column retire_date date not null;
-desc emp2;
+	alter table emp2
+				add column retire_date date null;
+		
+	update emp2
+		   set retire_date = curdate()
+		   where retire_date is null;
 
-select * from emp2;
+	select * from emp2;
+		
+	desc emp2;
+	alter table emp2
+				modify column retire_date date not null;
+	desc emp2;
+
+	select * from emp2;
 
 
 
@@ -646,26 +754,37 @@ select * from emp2;
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 select * from emp;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 이순신 사원 삭제
-delete from emp
-	        where emp_id = 's002'; -- 아이디값을 모르고 이름만 알 경우 서브쿼리로도 진행 가능
 
-select * from emp;
--- truncate는 row 그 자체를 없애버려서 복구가 안됨, delete는 표시처리로 진행해 복구됨
+	delete from emp
+				where emp_id = 's002'; -- 아이디값을 모르고 이름만 알 경우 서브쿼리로도 진행 가능
 
-rollback; -- 오토커밋은 대부분 비활성화(disable = false)가 디폴트임, mysql은 디폴트(enable = ture)가 활성화되어 롤백 동작안함, 실행시마다 트랜젝션이 완료, 완료 처리되고 있는 상태
+	select * from emp;
+	-- truncate는 row 그 자체를 없애버려서 복구가 안됨, delete는 표시처리로 진행해 복구됨
+
+	rollback; -- 오토커밋은 대부분 비활성화(disable = false)가 디폴트임, mysql은 디폴트(enable = ture)가 활성화되어 롤백 동작안함, 실행시마다 트랜젝션이 완료, 완료 처리되고 있는 상태
+
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- s004 사원 삭제
-delete from emp
-	        where emp_id = 's004';
-select * from emp;
 
-rollback;
-select * from emp;
+	delete from emp
+				where emp_id = 's004';
+	select * from emp;
 
-select @@autocommit; -- 명령어 트랜젝션 배울때 같이 배울 예정
-set autocommit = 0; -- 1일 경우 바로 트랜젝션 진행
+	rollback;
+	select * from emp;
+
+	select @@autocommit; -- 명령어 트랜젝션 배울때 같이 배울 예정
+	set autocommit = 0; -- 1일 경우 바로 트랜젝션 진행
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 다음주 학사 관리 테이블 설계 진행
 
