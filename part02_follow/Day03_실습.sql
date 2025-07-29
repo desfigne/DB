@@ -257,16 +257,16 @@ order by emp_id;
 -- ㄴ 부서의 누락없이 모두 출력
 
 	select
-		 u.unit_name 본부명,	d.dept_name 부서명,	count(v.duration) 휴가사용일수
+		 u.unit_name 본부명,  d.dept_name 부서명,  count(v.duration) 휴가사용일수
 		 -- 무엇: 본부명(각 부서의 소속 본부 표시)
-							-- 무엇: 부서명(집계의 그룹 기준)
-												-- 무엇: 휴가 사용 횟수(누가 몇 번이나 휴가를 썼는지, 없는 경우 0)
+	                        -- 무엇: 부서명(집계의 그룹 기준)
+	                                            -- 무엇: 휴가 사용 횟수(누가 몇 번이나 휴가를 썼는지, 없는 경우 0)
 	from employee e
-		 left outer join vacation v		on e.emp_id = v.emp_id		-- 어떻게: 사원별로 휴가 내역을 연결(휴가 없는 사원도 보임, 누가/무엇을)
-		 right outer join department d	on e.dept_id = d.dept_id	-- 왜: 모든 부서가 반드시 결과에 나오도록(누구를, 왜: 부서 누락 X) 
-		 left outer join unit u			on d.unit_id = u.unit_id	-- 어떻게: 본부(소속)를 부서에 붙여서 보여줌(어디에, 무엇을)
-	group by u.unit_name, d.dept_name								-- 누구/무엇: 본부별+부서별로 결과를 모으기 위해(누구끼리)
-	order by u.unit_name asc;										-- 어떻게: 본부명 내림차순으로 보기 좋게 정렬(어떻게)
+	     left outer join vacation v     on e.emp_id = v.emp_id      -- 어떻게: 사원별로 휴가 내역을 연결(휴가 없는 사원도 보임, 누가/무엇을)
+	     right outer join department d  on e.dept_id = d.dept_id    -- 왜: 모든 부서가 반드시 결과에 나오도록(누구를, 왜: 부서 누락 X) 
+	     left outer join unit u         on d.unit_id = u.unit_id    -- 어떻게: 본부(소속)를 부서에 붙여서 보여줌(어디에, 무엇을)
+	group by u.unit_name, d.dept_name                               -- 누구/무엇: 본부별+부서별로 결과를 모으기 위해(누구끼리)
+	order by u.unit_name asc;                                       -- 어떻게: 본부명 내림차순으로 보기 좋게 정렬(어떻게)
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
