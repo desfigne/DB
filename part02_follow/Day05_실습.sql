@@ -548,13 +548,14 @@ desc department;
 		desc orderitem;
 		
 		insert into orderitem(order_id, product_id, quantity, unit_price)
-			values(1, 1, 2, 1000), (1, 2, 3, 2000);  
-                  -- 1번(member_id) 회원의 첫 번째(order_id 1) 주문 - 모니터 2개
-	                               -- 1번(member_id) 회원의 첫 번째(order_id 1) 주문 - 키보드 3개
+			values(1, 1, 2, 1000), (1, 2, 3, 2000);
+				-- 1번(member_id) 회원의 첫 번째(order_id 1) 주문 - 모니터 2개
+				-- 1번(member_id) 회원의 첫 번째(order_id 1) 주문 - 키보드 3개
 		
 		insert into orderitem(order_id, product_id, quantity, unit_price)
-			values(2, 3, 2, 2500),  -- 1번(member_id) 회원의 두 번째(order_id 2) 주문 - 마우스 2개
-				  (2, 1, 3, 3000);  -- 1번(member_id) 회원의 두 번째(order_id 2) 주문 - 모니터 3개
+			values(2, 3, 2, 2500), (2, 1, 3, 3000);
+				-- 1번(member_id) 회원의 두 번째(order_id 2) 주문 - 마우스 2개
+				-- 1번(member_id) 회원의 두 번째(order_id 2) 주문 - 모니터 3개
 		
 		insert into orderitem(order_id, product_id, quantity, unit_price)
 			values(3, 2, 1, 2000),  -- 2번(member_id) 회원의 첫 번째(order_id 3) 주문 - 키보드 1개
