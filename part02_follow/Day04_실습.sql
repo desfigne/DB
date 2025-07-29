@@ -81,22 +81,19 @@ show tables;
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 홍길동 사원이 속한 부서명을 조회
-
 	select dept_name 
 	from department
 	where dept_id = (select dept_id from employee where emp_name = '홍길동'); -- and나 or을 사용할 경우 다중행 서브쿼리 처리임
 
 	select dept_id from employee where emp_name = '홍길동';
-    
--- -----------------------------------------------------------------------
 
 -- 홍길동 사원의 휴가사용 내역을 조회
-
 	select *
 	from vacation
 	where emp_id = (select emp_id from employee where emp_name = '홍길동');
     
--- -----------------------------------------------------------------------
+    
+-- ----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 제3본부에 속한 모든 부서를 조회
 
@@ -104,34 +101,28 @@ show tables;
 	from department
 	where unit_id = (select unit_id from unit where unit_name = '제3본부');
     
--- -----------------------------------------------------------------------
+    
+-- ----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 급여가 가장 높은 사원의 정보 조회
-
 	select *
 	from employee
 	where salary = (select max(salary) as salary from employee);
-    
--- -----------------------------------------------------------------------
 
 -- 급여가 가장 낮은 사원의 정보 조회
-
 	select *
 	from employee
 	where salary = (select min(salary) as salary from employee);
     
--- -----------------------------------------------------------------------
+    
+-- ----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 가장 빨리 입사한 사원의 정보 조회
-
 	select *
 	from employee
 	where hire_date = (select min(hire_date) as hire_date from employee);
-    
--- -----------------------------------------------------------------------
 
 -- 가장 최근 입사한 사원의 정보 조회
-
 	select *
 	from employee
 	where hire_date = (select max(hire_date) as hire_date from employee);
@@ -152,8 +143,6 @@ show tables;
 					  from department
 					  where unit_id = (select unit_id from unit where unit_name = '제3본부')
 	); -- > select * from employee where dept_id in (a, b);
-    
--- -----------------------------------------------------------------------
 
 	select *
 	from employee
@@ -202,40 +191,32 @@ show tables;
 -- ㄴ 휴가를 사용하지 않은 사원은 기본값 0
 -- ㄴ 사용일수 기준 내림차순 정렬
 
--- left outer join
+	-- left outer join
+		select e.emp_id, e.emp_name, e.hire_date, e.salary, ifnull(v.duration, 0) as duration
+		from employee e
+			 left outer join (select emp_id, sum(duration) as duration
+							  from vacation
+							  group by emp_id) v
+		on e.emp_id = v.emp_id
+		order by duration desc;
 
-	select e.emp_id, e.emp_name, e.hire_date, e.salary, ifnull(v.duration, 0) as duration
-	from employee e
-		 left outer join (select emp_id, sum(duration) as duration
-						  from vacation
-						  group by emp_id) v
-	on e.emp_id = v.emp_id
-	order by duration desc;
-    
--- -----------------------------------------------------------------------
-
--- ansi : inner join
-
-	select e.emp_id, e.emp_name, e.hire_date, e.salary, ifnull(v.duration, 0) as duration
-	from employee e
-		 inner join (select emp_id, sum(duration) as duration
-					 from vacation
-					 group by emp_id) v
-	on e.emp_id = v.emp_id;
+	-- ansi : inner join
+		select e.emp_id, e.emp_name, e.hire_date, e.salary, ifnull(v.duration, 0) as duration
+		from employee e
+			 inner join (select emp_id, sum(duration) as duration
+						 from vacation
+						 group by emp_id) v
+		on e.emp_id = v.emp_id;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (1) 2016년도부터 2017년도까지 입사한 사원들 조회
-
 	select *
 	from employee
 	where left(hire_date, 4) between '2016' and '2017';
-    
--- -----------------------------------------------------------------------
 
 -- (2) 1번의 실행 결과와 vacation 테이블을 조인하여 휴가사용 내역 조회
-
 	select *
 	from vacation v, (select *
 					  from employee
@@ -246,16 +227,12 @@ show tables;
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (1) 부서별 총급여, 평균급여를 구하여 30000 이상인 부서 조회
-
 	select dept_id, sum(salary) as sum, avg(salary) as avg
 	from employee
 	group by dept_id
 	having sum(salary) >= 30000;
-    
--- -----------------------------------------------------------------------
 
 -- (2) 1번의 실행 결과와 employee 테이블을 조인하여 사원아이디, 사원명, 급여, 부서아이디, 부서명, 부서별 총급여, 평균급여 조회
-
 	select e.emp_id, e.emp_name, e.salary, e.dept_id, d.dept_name, t.sum, t.avg
 	from employee e,
 		 department d, (select dept_id, sum(salary) as sum, avg(salary) as avg
@@ -372,14 +349,10 @@ where table_schema = 'hrdb2019'; -- 현재 생성된 게 아무것도 없어서 
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (1) view_salary_sum 실행 / 쿼리가 확 줄어듬
-
 	select *
 	from view_salary_sum;
-    
--- -----------------------------------------------------------------------
 
 -- (2) view_salary_sum 삭제
-
 	drop view view_salary_sum;
 	select * from information_schema.views
 	where table_schema = 'hrdb2019';
@@ -394,8 +367,7 @@ where table_schema = 'hrdb2019'; -- 현재 생성된 게 아무것도 없어서 
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 모든 테이블 목록
-
-show tables;
+	show tables;
 
 
 
@@ -445,28 +417,21 @@ select * from employee;
 	where table_schema = 'hrdb2019';
 
 	desc emp;
-    
--- -----------------------------------------------------------------------
 
 -- (2) 테이블 삭제
-
 	show tables;
 	drop table emp;
-    
--- -----------------------------------------------------------------------
 
 -- (3) 테이블 복제 - view[가상의 테이블]와 달리 물리적[실제의 테이블]으로 생성됨
-    
--- 	형식 __
-    
--- 	create table [테이블명]
--- 	              as [SQL 정의]
+	-- 형식 __
+		
+	-- create table [테이블명]
+	--               as [SQL 정의]
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- employee 테이블을 복제하여 emp 테이블 생성
-
 	create table emp
 	as
 	select * from employee;
@@ -480,7 +445,6 @@ select * from employee;
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 2016년도에 입사한 사원의 정보를 복제 : employee_2016
-
 	create table employee_2016
 	as
 	select * from employee where left(hire_date, 4) = '2016';

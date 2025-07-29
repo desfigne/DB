@@ -42,14 +42,10 @@ select count(*) from department; -- 7
 	select count(*)
 	from employee, department; -- 140
 	select * from employee, department; -- 테이블 조회
-    
--- -----------------------------------------------------------------------
 
 	select count(*)
 	from employee cross join department; -- 140
 	select * from employee, department; -- 테이블 조회
-    
--- -----------------------------------------------------------------------
 
 	select count(*) from vacation; -- 102
     
@@ -99,8 +95,6 @@ order by emp_id;
 	from employee inner join department
 		 on employee.dept_id = department.dept_id
 	order by emp_id;
-    
--- -----------------------------------------------------------------------
 
 -- inner join : 기본 SQL 방식, 오라클·MySQL 등에서 사용 가능 (3개 테이블)
 -- (직접 FROM에 ,로 다 나열 + WHERE에서 각각 연결)
@@ -122,8 +116,6 @@ order by emp_id;
 	from employee e
 		 inner join department d on e.dept_id = d.dept_id
 		 inner join unit u on d.unit_id = u.unit_id;
-    
--- -----------------------------------------------------------------------
 
 -- inner join : 기본 SQL 방식, 오라클·MySQL 등에서 사용 가능 (4개 테이블)
 
@@ -133,8 +125,6 @@ order by emp_id;
 		  and d.unit_id = u.unit_id
 		  and e.emp_id = v.emp_id
 	order by e.emp_id;
-    
--- -----------------------------------------------------------------------
 
 -- inner join : ANSI SQL 표준, 대부분의 RDBMS에서 권장 (4개 테이블)
 
@@ -306,7 +296,6 @@ order by emp_id;
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 사원테이블 self join
-
 	select e.emp_id, e.emp_name, m.emp_id, m.emp_name
 	from employee e, employee m
 	where e.emp_id = m.emp_id;
@@ -315,7 +304,6 @@ order by emp_id;
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 사원테이블 서브 쿼리
-
 	select emp_id, emp_name													-- < 서브쿼리 형식
 	from employee
 	where emp_id = (select emp_id from employee where emp_name = '홍길동');	-- > 서브쿼리 형식
