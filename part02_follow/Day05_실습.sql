@@ -71,11 +71,9 @@ desc department;
 		constraint	pk_emp_const2	primary key(emp_id) -- 워크벤치 버전에 따라 가능한 경우가 있고 불가한 경우가 있음, 현재 학습 버전에서는 등록됨
 	);
 
-	select * from information_schema.table_constraints
-		where table_name = 'emp_const2'; -- 현재 학습 버전에서는 위의 pk_emp_const2가 등록은 되었으나 내부적으로 조회시 PRIMARY로 나옴
+	select * from information_schema.table_constraints where table_name = 'emp_const2'; -- 현재 학습 버전에서는 위의 pk_emp_const2가 등록은 되었으나 내부적으로 조회시 PRIMARY로 나옴
 
-	insert into emp_const2(emp_id, emp_name, hire_date, salary)
-		values('s001', '홍길동', now(), 1000); -- curdate를 사용시 일 뒤 시분초는 안들어가나 now는 시분초까지 생성되고 나서 date 타입에 들어가기 때문에 효율성이 떨어져서 아웃풋 창에서 워닝으로 알려줌
+	insert into emp_const2(emp_id, emp_name, hire_date, salary) values('s001', '홍길동', now(), 1000); -- curdate를 사용시 일 뒤 시분초는 안들어가나 now는 시분초까지 생성되고 나서 date 타입에 들어가기 때문에 효율성이 떨어져서 아웃풋 창에서 워닝으로 알려줌
 		
 	select * from emp_const2;
 	desc emp_const2;
@@ -86,8 +84,8 @@ desc department;
 -- emp_const2 컬럼 추가 : phone, char(13) 컬럼 추가
 
 	select * from emp_const2; -- 데이터가 있는 상태에서는 not null 처리하면 안됨
-	alter table emp_const2
-		add column phone char(13) null;
+    
+	alter table emp_const2 add column phone char(13) null;
 
 	desc emp_const2;
 	select * from emp_const2;
@@ -98,9 +96,7 @@ desc department;
 -- 홍길동의 폰 번호 업데이트 후, phone 컬럼을 not null로 수정
 
 	set sql_safe_updates = 0; -- 프로그램 실행시 디폴트 값이 금지로 변경되기에 먼저 해제 필요
-	update emp_const2
-		set phone = '010-1234-5678'
-		where emp_id = 's001';
+	update emp_const2 set phone = '010-1234-5678' where emp_id = 's001';
 	--     where emp_name = '홍길동'; -- 이렇게 처리도 가능하나 동명이인의 이름의 폰 번호가 변경될 수 있으므로 프라이머리 키를 지정해 변경하는 것을 권장
 
 	select * from emp_const2;
@@ -116,20 +112,17 @@ desc department;
 -- - 중복된 데이터 확인 : 똑같은 데이터가 있을 경우 사전 update로 교체 후 진행
 -- - null 입력 가능: 처음 한번만 들어갈 수 있음, 두 번째부터는 중복으로 에러 처리됨
 	
-    alter table emp_const2
-		add constraint uni_phone unique(phone);
+    alter table emp_const2 add constraint uni_phone unique(phone);
         
     desc emp_const2;
-    select * from information_schema.table_constraints
-		where table_name = 'emp_const2';
+    select * from information_schema.table_constraints where table_name = 'emp_const2';
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- phone 컬럼에 unique 제약 삭제
 
-	alter table emp_const2
-		drop constraint uni_phone;
+	alter table emp_const2 drop constraint uni_phone;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -163,11 +156,9 @@ desc department;
     
 -- dept_id 컬럼에 primary key 제약 추가
     
-    alter table dept
-		add constraint pk_dept_id primary key(dept_id);
+    alter table dept add constraint pk_dept_id primary key(dept_id);
         
-	select * from information_schema.table_constraints
-		where table_name = 'dept';
+	select * from information_schema.table_constraints where table_name = 'dept';
     desc dept;
     
     
@@ -190,29 +181,21 @@ desc department;
 -- emp 테이블에 제약 사항 추가
 
 	-- primary key(emp_id) 기본키 제약 추가
-		select * from information_schema.table_constraints
-				where table_name = 'emp';
+		select * from information_schema.table_constraints where table_name = 'emp';
 
-		alter table emp
-			add constraint primary key(emp_id);
+		alter table emp add constraint primary key(emp_id);
 		desc emp;
     
 	-- foreign key(dept_id) 참조키 제약 추가
-		alter table emp
-			add constraint fk_dept_id foreign key(dept_id)
-				references dept(dept_id); -- 에러 발생, 사유는 아래 기재
+		alter table emp add constraint fk_dept_id foreign key(dept_id) references dept(dept_id); -- 에러 발생, 사유는 아래 기재
 				
 		select * from dept;
 		select * from emp; -- 조회해보면 사원정보에는 STG가 있으나 dept에는 현재 STG가 없음
     
 		-- 고소해 사원 부서이동 --> ACC
-			update emp
-				set dept_id = 'ACC'
-				where emp_id = 'S0020';
+			update emp set dept_id = 'ACC' where emp_id = 'S0020';
 
-			alter table emp
-				add constraint fk_dept_id foreign key(dept_id)
-					references dept(dept_id);
+			alter table emp add constraint fk_dept_id foreign key(dept_id) references dept(dept_id);
 			desc dept;
 			desc emp;
             
@@ -303,10 +286,9 @@ desc department;
     
 -- 테이블 제약 사항 확인
 
-	select * from information_schema.table_constraints
-		where table_name in ('subject', 'student', 'professor');
+	select * from information_schema.table_constraints where table_name in ('subject', 'student', 'professor');
         
-	-- Database > Reverse Engineer 실행
+	-- 위 코드 실행 후 Database > Reverse Engineer 실행
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------

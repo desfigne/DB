@@ -83,8 +83,7 @@ show tables;
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 홍길동 사원이 속한 부서명을 조회
-	select dept_name 
-	from department
+	select dept_name from department
 	where dept_id = (select dept_id from employee where emp_name = '홍길동'); -- and나 or을 사용할 경우 다중행 서브쿼리 처리임
 
 	select dept_id from employee where emp_name = '홍길동';
@@ -132,15 +131,13 @@ show tables;
 
 -- '제3본부'에 속한 모든 사원 정보 조회
 
-	select *
-	from employee
+	select * from employee
 	where dept_id in (select dept_id
 					  from department
 					  where unit_id = (select unit_id from unit where unit_name = '제3본부')
 	); -- > select * from employee where dept_id in (a, b);
 
-	select *
-	from employee
+	select * from employee
 	where dept_id = (select dept_id -- 단일행 출력인데 다중행을 가져오고 있어 에러 발생
 					 from department
 					 where unit_id = (select unit_id from unit where unit_name = '제3본부')
@@ -207,8 +204,7 @@ show tables;
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- (1) 2016년도부터 2017년도까지 입사한 사원들 조회
-	select *
-	from employee
+	select * from employee
 	where left(hire_date, 4) between '2016' and '2017';
 
 -- (2) 1번의 실행 결과와 vacation 테이블을 조인하여 휴가사용 내역 조회
@@ -582,8 +578,7 @@ create table emp2(
 show tables;
 desc emp2;
 
-insert into emp2(ename, gender, hire_date, salary)
-	        values('홍길동', 'm', now(), 1000); -- auto_increment로 emp2()와 values에 지정하지 않아도 진행됨
+insert into emp2(ename, gender, hire_date, salary) values('홍길동', 'm', now(), 1000); -- auto_increment로 emp2()와 values에 지정하지 않아도 진행됨
           
 select * from emp2;
 
@@ -610,8 +605,7 @@ select * from emp;
 
 -- phone(char, 13) 컬럼 추가, null 허용 (데이터가 없는 상태면 상관없음)
 
-	alter table emp
-				add column phone char(13) not null; -- 오라클은 add만 입력, 컬럼은 생략됨, 데이터가 없는데 넣으려고 하면 오라클은 에러나며 진행안됨
+	alter table emp add column phone char(13) not null; -- 오라클은 add만 입력, 컬럼은 생략됨, 데이터가 없는데 넣으려고 하면 오라클은 에러나며 진행안됨
 
 	desc emp;
 	select * from emp;
@@ -621,19 +615,16 @@ select * from emp;
 
 -- phone 컬럼 삭제
 
-	alter table emp
-				drop column phone;
+	alter table emp drop column phone;
 		
 	select * from emp;
 
-	alter table emp
-				add column phone char(13) null;
+	alter table emp add column phone char(13) null;
 		
 	desc emp;
 	select * from emp;
 
-	insert into emp
-				values('s004', '홍홍', 'f', now(), 4000, '010-1234-5678');
+	insert into emp values('s004', '홍홍', 'f', now(), 4000, '010-1234-5678');
 		
 	select * from emp;
     
@@ -642,24 +633,20 @@ select * from emp;
 
 -- phone 컬럼의 크기 변경 : char(13) -> char(10)
 
-	alter table emp
-				modify column phone char(10) null; -- 저장된 데이터보다 크기가 작으면 에러 발생, 데이터 유실 위험 발생으로 진행 안됨
+	alter table emp modify column phone char(10) null; -- 저장된 데이터보다 크기가 작으면 에러 발생, 데이터 유실 위험 발생으로 진행 안됨
 		
-	alter table emp
-				modify column phone char(20) null; -- 크기가 커지는건 가능함
+	alter table emp modify column phone char(20) null; -- 크기가 커지는건 가능함
 		
 	desc emp;
 
-	alter table emp
-				modify column phone char(13) null;
+	alter table emp modify column phone char(13) null;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- phone 컬럼 삭제
 
-	alter table emp
-				drop column phone;
+	alter table emp drop column phone;
 
 
 
@@ -685,18 +672,13 @@ select * from emp;
 
 -- 홍길동의 급여를 6000으로 수정
 
-	update emp
-		   set salary = 6000; -- 이렇게 주면 전원이 다 바뀜
+	update emp set salary = 6000; -- 이렇게 주면 전원이 다 바뀜
 
-	update emp
-		   set salary = 6000
-		   where emp_id = 's001'; -- 업데이트 불가 에러 발생
+	update emp set salary = 6000 where emp_id = 's001'; -- 업데이트 불가 에러 발생
 		
 	set sql_safe_updates = 0; -- 업데이트 보호모드 해제 / 워크벤치 실행시마다 초기화되어 보호모드 자동 실행됨, 릴리즈 버전마다 달라질 수 있음
 
-	update emp
-		   set salary = 6000
-		   where emp_id = 's001';
+	update emp set salary = 6000 where emp_id = 's001';
 
 	select * from emp;
     
@@ -720,18 +702,16 @@ select * from emp;
 -- ㄴ 기존 데이터는 현재 날짜로 업데이트
 -- ㄴ 업데이트 완료 후 retire_date의 설정을 'not null'로 변경
 
-	alter table emp2
-				add column retire_date date null;
+	alter table emp2 add column retire_date date null;
 		
-	update emp2
-		   set retire_date = curdate()
-		   where retire_date is null;
+	update emp2 set retire_date = curdate() where retire_date is null;
 
 	select * from emp2;
 		
 	desc emp2;
-	alter table emp2
-				modify column retire_date date not null;
+    
+	alter table emp2 modify column retire_date date not null;
+    
 	desc emp2;
 
 	select * from emp2;
@@ -759,8 +739,7 @@ select * from emp;
 
 -- 이순신 사원 삭제
 
-	delete from emp
-				where emp_id = 's002'; -- 아이디값을 모르고 이름만 알 경우 서브쿼리로도 진행 가능
+	delete from emp where emp_id = 's002'; -- 아이디값을 모르고 이름만 알 경우 서브쿼리로도 진행 가능
 
 	select * from emp;
 	-- truncate는 row 그 자체를 없애버려서 복구가 안됨, delete는 표시처리로 진행해 복구됨
@@ -769,8 +748,7 @@ select * from emp;
 
 -- s004 사원 삭제
 
-	delete from emp
-				where emp_id = 's004';
+	delete from emp where emp_id = 's004';
 	select * from emp;
 
 	rollback;
@@ -778,11 +756,6 @@ select * from emp;
 
 	select @@autocommit; -- 명령어 트랜젝션 배울때 같이 배울 예정
 	set autocommit = 0; -- 1일 경우 바로 트랜젝션 진행
-    
-    
--- -----------------------------------------------------------------------------------------------------------------------------------------------
-
--- 다음주 학사 관리 테이블 설계 진행
 
 
 
