@@ -612,8 +612,8 @@ desc department;
     
 	insert into product(name, price)
 		values('리모컨', 3000),
-			  ('USB', 4000),
-			  ('마우스패드', 5000);
+			('USB', 4000),
+			('마우스패드', 5000);
               
 	select * from product;
     
