@@ -650,9 +650,9 @@ desc department;
 	-- ansi 방식의 조인 : 자격증에서는 이 방식을 알아야 함
 		select m.name, m.created_at, od.order_date, oi.quantity, p.name, oi.unit_price
 		from member m 
-        inner join `order` od on od.member_id = m.member_id
-        inner join orderitem oi on od.order_id = oi.order_id
-        inner join product p on oi.product_id = p.product_id
+			inner join `order` od on od.member_id = m.member_id
+			inner join orderitem oi on od.order_id = oi.order_id
+			inner join product p on oi.product_id = p.product_id
 		order by m.created_at;
 
 
