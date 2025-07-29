@@ -239,13 +239,13 @@ select * from emp;
 -- - 게시판의 게시글 삭제 시 게시글의 댓글이 함께 삭제되는 경우
 
 	create table board(
-		bid 		int 			primary key 	auto_increment,
-		title 		varchar(100) 	not null,
-		content 	longtext,
-		bdate 		datetime
+		bid         int             primary key     auto_increment,
+		title       varchar(100)    not null,
+		content     longtext,
+		bdate       datetime
 	);
     
-    create table reply(
+	create table reply(
 		rid         int             primary key     auto_increment,
 		content     varchar(100)    not null,
 		bid         int             not null,
