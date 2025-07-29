@@ -297,7 +297,8 @@ show tables;
 	select emp_id, emp_name, salary, dept_id from employee
     where dept_id = (select dept_id from department where dept_name = '정보시스템');
     
--- -----------------------------------------------------------------------
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 	select emp_id, emp_name, salary, dept_id from employee
     where dept_id = (select dept_id from department where dept_name = '영업')
