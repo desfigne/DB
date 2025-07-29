@@ -328,13 +328,11 @@ desc department;
 	-- oracle 방식의 조인 : 실무에서는 이 방식을 더 자주 사용함
 		select su.sname
 		from subject su, student st
-		where su.sid = st.sid
-			and st.sname = '홍길동';
+		where su.sid = st.sid and st.sname = '홍길동';
 
 	-- ansi 방식의 조인 : 자격증에서는 이 방식을 알아야 함
 		select su.sname
-		from subject su inner join student st
-								   on su.sid = st.sid
+		from subject su inner join student st on su.sid = st.sid
 		where st.sname ='홍길동';
 		
 	-- 서브쿼리 :
@@ -346,13 +344,11 @@ desc department;
 	-- oracle 방식의 조인 : 실무에서는 이 방식을 더 자주 사용함
 		select su.sname as 과목명, st.sname as 학생명
 		from subject su, student st
-		where su.sid = st.sid
-			and st.sname = '홍길동';
+		where su.sid = st.sid and st.sname = '홍길동';
 
 	-- ansi 방식의 조인 : 자격증에서는 이 방식을 알아야 함
 		select su.sname as 과목명, st.sname as 학생명
-		from subject su inner join student st
-								   on su.sid = st.sid
+		from subject su inner join student st on su.sid = st.sid
 		where st.sname = '홍길동';
     
     
@@ -363,13 +359,11 @@ desc department;
 	-- oracle 방식의 조인 : 실무에서는 이 방식을 더 자주 사용함
 		select su.sname
 		from subject su, professor p
-		where su.sid = p.sid
-			and name = '스미스';
+		where su.sid = p.sid and name = '스미스';
 
 	-- ansi 방식의 조인 : 자격증에서는 이 방식을 알아야 함
 		select su.sname
-		from subject su inner join professor p
-								   on su.sid = p.sid
+		from subject su inner join professor p on su.sid = p.sid
 		where sname = '스미스';
 		
 	-- 서브쿼리 :
@@ -393,13 +387,11 @@ desc department;
 	-- oracle 방식의 조인 : 실무에서는 이 방식을 더 자주 사용함
 		select p.name
         from professor p, subject su
-        where p.sid = su.sid
-			and su.sname = 'java';
+        where p.sid = su.sid and su.sname = 'java';
 
 	-- ansi 방식의 조인 : 자격증에서는 이 방식을 알아야 함
 		select p.name
-		from professor p inner join subject su
-	                                        on p.sid = su.sid
+		from professor p inner join subject su on p.sid = su.sid
 		where su.sname = 'java';
 
 	-- 서브쿼리 :
@@ -415,9 +407,7 @@ desc department;
 	-- oracle 방식의 조인 : 실무에서는 이 방식을 더 자주 사용함
 		select su.sid, su.sname, p.name, st.sname
 		from subject su, professor p, student st
-        where su.sid = p.sid
-			and su.sid = st.sid
-            and su.sname = 'java';
+        where su.sid = p.sid and su.sid = st.sid and su.sname = 'java';
 
 	-- ansi 방식의 조인 : 자격증에서는 이 방식을 알아야 함
 		select su.sid, su.sname, p.name, st.sname
@@ -444,22 +434,18 @@ desc department;
 	desc student;
 	select * from student;
     
-    alter table student
-    add column kor decimal(7, 2) null;
+    alter table student add column kor decimal(7, 2) null;
     
-    alter table student
-    add column eng decimal(7, 2) null;
+    alter table student add column eng decimal(7, 2) null;
     
-    alter table student
-    add column math decimal(7, 2) null;
+    alter table student add column math decimal(7, 2) null;
     
     desc student;
 
 -- kor, eng, math 과목 컬럼 0점 입력
     
-    update student
-		set kor = 0, eng = 0, math = 0
-        where kor is null and eng is null and math is null;
+    update student set kor = 0, eng = 0, math = 0
+	               where kor is null and eng is null and math is null;
 
 	select * from student;
 
