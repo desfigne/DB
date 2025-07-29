@@ -279,7 +279,7 @@ order by emp_id;
 		 e.emp_name 사원명,	e.hire_date 입사일,	e.salary 연봉,	d.dept_name 부서명,		u.unit_name 본부명
 	from
 		 employee e inner join department d     on e.dept_id = d.dept_id
-	                left outer join unit u      on d.unit_id = u.unit_id
+	                    left outer join unit u      on d.unit_id = u.unit_id
 	where
 		 left(hire_date, 4) between '2017' and '2018'
 	and
