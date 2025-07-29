@@ -66,7 +66,7 @@ show tables;
 -- ㄴ 사번, 사원명, 부서아이디, 부서명(부서테이블), 폰번호, 급여
 
 	select emp_id, emp_name, dept_id,
-	       (select dept_name from department where dept_name = '정보시스템') as dept_name, -- 사용은 되지만 권장하지 않음
+	      (select dept_name from department where dept_name = '정보시스템') as dept_name, -- 사용은 되지만 권장하지 않음
 	       phone, salary
 	from employee
 	where dept_id = (select dept_id from department where dept_name = '정보시스템');
