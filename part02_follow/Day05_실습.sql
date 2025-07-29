@@ -523,9 +523,7 @@ desc department;
 		desc product;
 		
 		insert into product(name, price)
-			values('모니터', 1000),
-				  ('키보드', 2000),
-				  ('마우스', 3000);
+			values('모니터', 1000), ('키보드', 2000), ('마우스', 3000);
 				  
 		select * from product;
 
@@ -534,12 +532,10 @@ desc department;
 		desc `order`;
 		
 		insert into `order`(member_id, order_date)
-			values(1, '2024-06-20'),
-				  (1, '2024-06-23'); -- 1번 회원 주문
+			values(1, '2024-06-20'), (1, '2024-06-23'); -- 1번 회원의 주문 2건
 				  
 		insert into `order`(member_id, order_date)
-			values(2, '2024-06-22'),
-				  (2, '2024-06-25'); -- 2번 회원 주문
+			values(2, '2024-06-22'), (2, '2024-06-25'); -- 2번 회원의 주문 2건
 				  
 		select * from `order`;
 
