@@ -258,7 +258,7 @@ desc department;
 			sid     int,
 			stdate  datetime,
 			constraint fk_sid_student       foreign key(sid)
-	                                        references subject(sid)
+	                                                references subject(sid)
 		);
 		
 		show tables;
@@ -273,7 +273,7 @@ desc department;
 			sid     int,
 			pdate   datetime,
 			constraint fk_sid_professor     foreign key(sid)
-	                                        references student(sid)
+	                                                references student(sid)
 		);
 		
 		show tables;
