@@ -265,11 +265,18 @@ show tables;
 -- 영업부, 정보시스템 부서의 사원아이디, 사원명, 급여, 부서아이디 조회
 -- > union : 중복되는 row를 제외하고 출력 > 영업 부서 사원들이 한번만 출력
 
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '영업')
+    
 	union
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+    
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '영업')
+    
 	union
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
+    
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '정보시스템');
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
