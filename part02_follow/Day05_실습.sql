@@ -548,8 +548,9 @@ desc department;
 		desc orderitem;
 		
 		insert into orderitem(order_id, product_id, quantity, unit_price)
-			values(1, 1, 2, 1000),  -- 1번(member_id) 회원의 첫 번째(order_id 1) 주문 - 모니터 2개
-				  (1, 2, 3, 2000);  -- 1번(member_id) 회원의 첫 번째(order_id 1) 주문 - 키보드 3개
+			values(1, 1, 2, 1000), (1, 2, 3, 2000);  
+                  -- 1번(member_id) 회원의 첫 번째(order_id 1) 주문 - 모니터 2개
+	                               -- 1번(member_id) 회원의 첫 번째(order_id 1) 주문 - 키보드 3개
 		
 		insert into orderitem(order_id, product_id, quantity, unit_price)
 			values(2, 3, 2, 2500),  -- 1번(member_id) 회원의 두 번째(order_id 2) 주문 - 마우스 2개
@@ -576,8 +577,7 @@ desc department;
 		
 		select m.name, m.email, m.created_at, left(o.order_date, 10) as order_date
 		from member m, `order` o
-		where m.member_id = o.member_id
-			and m.name = '홍길동';
+		where m.member_id = o.member_id and m.name = '홍길동';
 
 	-- ansi 방식의 조인 : 자격증에서는 이 방식을 알아야 함
 		select m.name, m.email, m.created_at, left(o.order_date, 10) as order_date
@@ -611,9 +611,7 @@ desc department;
 	desc product;
     
 	insert into product(name, price)
-		values('리모컨', 3000),
-			('USB', 4000),
-			('마우스패드', 5000);
+		values('리모컨', 3000), ('USB', 4000), ('마우스패드', 5000);
               
 	select * from product;
     
