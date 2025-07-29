@@ -101,9 +101,9 @@ desc department;
 
 	select * from emp_const2;
     
-    alter table emp_const2
-    modify column phone char(13) not null;
-    desc emp_const2;
+	alter table emp_const2
+	modify column phone char(13) not null;
+	desc emp_const2;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -112,10 +112,10 @@ desc department;
 -- - 중복된 데이터 확인 : 똑같은 데이터가 있을 경우 사전 update로 교체 후 진행
 -- - null 입력 가능: 처음 한번만 들어갈 수 있음, 두 번째부터는 중복으로 에러 처리됨
 	
-    alter table emp_const2 add constraint uni_phone unique(phone);
+	alter table emp_const2 add constraint uni_phone unique(phone);
         
-    desc emp_const2;
-    select * from information_schema.table_constraints where table_name = 'emp_const2';
+	desc emp_const2;
+	select * from information_schema.table_constraints where table_name = 'emp_const2';
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -130,8 +130,8 @@ desc department;
 -- 테이블 삭제 : emp, emp2
 
 	show tables;
-    drop table emp;
-    drop table emp2;
+	drop table emp;
+	drop table emp2;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -142,38 +142,38 @@ desc department;
 -- ** 복제 시 키 값은 복제되지 않음
 
 	create table dept
-    as
+	as
 	select * from department
-    where unit_id is not null; -- 본부가 아직 정해지지 않은 부분은 제외하고 복제
+	where unit_id is not null; -- 본부가 아직 정해지지 않은 부분은 제외하고 복제
     
 	show tables;
-    desc dept; -- 현재 키 값은 복제되지 않음
+	desc dept; -- 현재 키 값은 복제되지 않음
     
-    select * from dept;
+	select * from dept;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
     
 -- dept_id 컬럼에 primary key 제약 추가
     
-    alter table dept add constraint pk_dept_id primary key(dept_id);
+	alter table dept add constraint pk_dept_id primary key(dept_id);
         
 	select * from information_schema.table_constraints where table_name = 'dept';
-    desc dept;
+	desc dept;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
     
 -- 2018년도에 입사한 사원들만 복제
     
-    create table emp
-    as
-    select * from employee
-    where left(hire_date, 4) = '2018';
+	create table emp
+	as
+	select * from employee
+	where left(hire_date, 4) = '2018';
     
 	show tables;
-    desc emp;
-    select * from emp;
+	desc emp;
+	select * from emp;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
