@@ -248,10 +248,10 @@ select * from emp;
     create table reply(
 		rid         int             primary key     auto_increment,
 		content     varchar(100)    not null,
-        bid         int             not null,
-        rdate       datetime,
-        constraint fk_reply_bid     foreign key(bid)
-	                                references board(bid)
+		bid         int             not null,
+		rdate       datetime,
+		constraint fk_reply_bid     foreign key(bid)
+	                            references board(bid)
 		on delete cascade -- bid가 딜리트되면 함께 삭제됨
 -- 		on update cascade -- bid가 업데이트되면 함께 업데이트됨
     );
