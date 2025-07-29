@@ -262,7 +262,7 @@ order by emp_id;
 	                             -- 무엇: 부서명(집계의 그룹 기준)
 	                                                  -- 무엇: 휴가 사용 횟수(누가 몇 번이나 휴가를 썼는지, 없는 경우 0)
 	from employee e
-	     left outer join vacation v     on e.emp_id = v.emp_id      -- 어떻게: 사원별로 휴가 내역을 연결(휴가 없는 사원도 보임, 누가/무엇을)
+	     left outer join vacation v     on e.emp_id  = v.emp_id     -- 어떻게: 사원별로 휴가 내역을 연결(휴가 없는 사원도 보임, 누가/무엇을)
 	     right outer join department d  on e.dept_id = d.dept_id    -- 왜: 모든 부서가 반드시 결과에 나오도록(누구를, 왜: 부서 누락 X) 
 	     left outer join unit u         on d.unit_id = u.unit_id    -- 어떻게: 본부(소속)를 부서에 붙여서 보여줌(어디에, 무엇을)
 	group by u.unit_name, d.dept_name                               -- 누구/무엇: 본부별+부서별로 결과를 모으기 위해(누구끼리)
@@ -276,10 +276,10 @@ order by emp_id;
 -- ㄴ 소속본부를 모두 조회
 
 	select
-		 e.emp_name 사원명,	e.hire_date 입사일,	e.salary 연봉,	dept_name 부서명,		u.unit_name 본부명
+		 e.emp_name 사원명,	e.hire_date 입사일,	e.salary 연봉,	d.dept_name 부서명,		u.unit_name 본부명
 	from
-		 employee e inner join department d		on e.dept_id = d.dept_id
-					 left outer join unit u		on d.unit_id = u.unit_id
+		 employee e inner join department d     on e.dept_id = d.dept_id
+	                left outer join unit u      on d.unit_id = u.unit_id
 	where
 		 left(hire_date, 4) between '2017' and '2018'
 	and
