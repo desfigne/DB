@@ -90,42 +90,36 @@ show tables;
 	select dept_id from employee where emp_name = '홍길동';
 
 -- 홍길동 사원의 휴가사용 내역을 조회
-	select *
-	from vacation
-	where emp_id = (select emp_id from employee where emp_name = '홍길동');
+	select * from vacation
+    where emp_id = (select emp_id from employee where emp_name = '홍길동');
     
     
 -- ----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 제3본부에 속한 모든 부서를 조회
-	select *
-	from department
+	select * from department
 	where unit_id = (select unit_id from unit where unit_name = '제3본부');
     
     
 -- ----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 급여가 가장 높은 사원의 정보 조회
-	select *
-	from employee
+	select * from employee
 	where salary = (select max(salary) as salary from employee);
 
 -- 급여가 가장 낮은 사원의 정보 조회
-	select *
-	from employee
+	select * from employee
 	where salary = (select min(salary) as salary from employee);
     
     
 -- ----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 가장 빨리 입사한 사원의 정보 조회
-	select *
-	from employee
+	select * from employee
 	where hire_date = (select min(hire_date) as hire_date from employee);
 
 -- 가장 최근 입사한 사원의 정보 조회
-	select *
-	from employee
+	select * from employee
 	where hire_date = (select max(hire_date) as hire_date from employee);
 
 
@@ -283,23 +277,43 @@ show tables;
 -- 영업부, 정보시스템 부서의 사원아이디, 사원명, 급여, 부서아이디 조회
 -- > union : 중복되는 row를 포함하고 출력 > 영업 부서 사원들이 중복되어 출력
 
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '영업')
+    
 	union all
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+    
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '영업')
+    
 	union all
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
+    
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '정보시스템');
     
 -- -----------------------------------------------------------------------
 
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '영업')
+    
 	union
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+    
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '영업')
+    
 	union
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업')
+    
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '영업')
+    
 	union all
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템')
+    
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '정보시스템')
+    
 	union
-	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
+    
+	select emp_id, emp_name, salary, dept_id from employee
+    where dept_id = (select dept_id from department where dept_name = '정보시스템');
 
 
 
