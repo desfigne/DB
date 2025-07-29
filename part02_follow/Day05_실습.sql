@@ -422,7 +422,7 @@ desc department;
 -- ㄴ 학생명 출력, 서브쿼리
 
 	select sname from student
-    where sid = (select sid from subject
+	where sid = (select sid from subject
 	              where sid = (select sid from professor where name = '김철수')
     );
     
@@ -434,17 +434,17 @@ desc department;
 	desc student;
 	select * from student;
     
-    alter table student add column kor decimal(7, 2) null;
+	alter table student add column kor decimal(7, 2) null;
     
-    alter table student add column eng decimal(7, 2) null;
+	alter table student add column eng decimal(7, 2) null;
     
-    alter table student add column math decimal(7, 2) null;
+	alter table student add column math decimal(7, 2) null;
     
-    desc student;
+	desc student;
 
 -- kor, eng, math 과목 컬럼 0점 입력
     
-    update student set kor = 0, eng = 0, math = 0
+	update student set kor = 0, eng = 0, math = 0
 	               where kor is null and eng is null and math is null;
 
 	select * from student;
