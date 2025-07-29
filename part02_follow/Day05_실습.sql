@@ -377,7 +377,7 @@ desc department;
 
 	insert into professor(name, sid, pdate) values('안중근', 1 , now());
     
-    select * from professor;
+	select * from professor;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -386,8 +386,8 @@ desc department;
 
 	-- oracle 방식의 조인 : 실무에서는 이 방식을 더 자주 사용함
 		select p.name
-        from professor p, subject su
-        where p.sid = su.sid and su.sname = 'java';
+		from professor p, subject su
+		where p.sid = su.sid and su.sname = 'java';
 
 	-- ansi 방식의 조인 : 자격증에서는 이 방식을 알아야 함
 		select p.name
@@ -407,13 +407,13 @@ desc department;
 	-- oracle 방식의 조인 : 실무에서는 이 방식을 더 자주 사용함
 		select su.sid, su.sname, p.name, st.sname
 		from subject su, professor p, student st
-        where su.sid = p.sid and su.sid = st.sid and su.sname = 'java';
+		where su.sid = p.sid and su.sid = st.sid and su.sname = 'java';
 
 	-- ansi 방식의 조인 : 자격증에서는 이 방식을 알아야 함
 		select su.sid, su.sname, p.name, st.sname
 		from subject su inner join professor p on su.sid = p.sid
 		                inner join student st on su.sid = st.sid
-        where su.sname = 'java';
+		where su.sname = 'java';
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
