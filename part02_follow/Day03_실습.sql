@@ -299,6 +299,7 @@ order by emp_id;
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 -- 사원테이블 self join
+
 	select e.emp_id, e.emp_name, m.emp_id, m.emp_name
 	from employee e, employee m
 	where e.emp_id = m.emp_id;
@@ -307,6 +308,7 @@ order by emp_id;
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 사원테이블 서브 쿼리
+
 	select emp_id, emp_name													-- < 서브쿼리 형식
 	from employee
 	where emp_id = (select emp_id from employee where emp_name = '홍길동');	-- > 서브쿼리 형식
