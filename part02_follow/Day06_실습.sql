@@ -246,12 +246,12 @@ select * from emp;
 	);
     
     create table reply(
-		rid 		int 			primary key 	auto_increment,
-		content 	varchar(100) 	not null,
-        bid 		int 			not null,
-        rdate 		datetime,
-        constraint fk_reply_bid 	foreign key(bid)
-                                    references board(bid)
+		rid         int             primary key     auto_increment,
+		content     varchar(100)    not null,
+        bid         int             not null,
+        rdate       datetime,
+        constraint fk_reply_bid     foreign key(bid)
+	                                references board(bid)
 		on delete cascade -- bid가 딜리트되면 함께 삭제됨
 -- 		on update cascade -- bid가 업데이트되면 함께 업데이트됨
     );
@@ -270,8 +270,8 @@ select * from emp;
 -- bid, 2 삭제
 	delete from board where bid = 2;
     
-    select * from board;
-    select * from reply;
+	select * from board;
+	select * from reply;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -297,7 +297,7 @@ select * from emp;
 		end $$
 		delimiter ;
     
-	select * from information_schema.triggers;
+		select * from information_schema.triggers;
     
     -- 부서 테이블 삭제
 		select * from dept;
@@ -381,10 +381,10 @@ select * from emp;
     
     -- 테이블 생성
 		create table salary_log(
-			emp_id 			char(5) 	primary key,
-			old_salary 		int,
-			new_salary 		int,
-			change_date 	date
+			emp_id          char(5)     primary key,
+			old_salary      int,
+			new_salary      int,
+			change_date     date
 		);
 		
 		desc salary_log;
@@ -411,8 +411,7 @@ select * from emp;
     -- 변경 내역 확인
 		select * from salary_log;
 		
-		update employee set salary = 1000
-			where emp_id = 'S0020';
+		update employee set salary = 1000 where emp_id = 'S0020';
 		
 		select * from salary_log;
 
