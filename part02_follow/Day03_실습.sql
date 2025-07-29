@@ -57,11 +57,12 @@ select count(*) from department; -- 7
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 사원, 부서, 휴가 테이블 cross join : 20 * 7 * 102 / 테스트 이외에는 사용 주의, 실제 데이터에 사용 시 다운될 수 있음
-select count(*) from employee, department, vacation; -- 오라클에서는 이런 형태로 사용
-select count(*)
-from employee corss join department, corss join vacation;
-select count(*)
-from employee corss join department, vacation;
+
+	select count(*) from employee, department, vacation; -- 오라클에서는 이런 형태로 사용
+	select count(*)
+	from employee corss join department, corss join vacation;
+	select count(*)
+	from employee corss join department, vacation;
 
 
 
@@ -310,7 +311,8 @@ order by emp_id;
 	from employee e, employee m
 	where e.emp_id = m.emp_id;
     
--- -----------------------------------------------------------------------
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 사원테이블 서브 쿼리
 
