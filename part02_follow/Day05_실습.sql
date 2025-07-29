@@ -243,22 +243,22 @@ desc department;
 
 	-- (1) 과목
 		create table subject(
-			sid 	int 			primary key 	auto_increment,
-			sname 	varchar(10) 	not null,
-			sdate 	datetime
+			sid     int             primary key     auto_increment,
+			sname   varchar(10)     not null,
+			sdate   datetime
 		);
 		
 		drop table subject;
 
 	-- (2) 학생
 		create table student(
-			stid 	int 			primary key 	auto_increment,
-			sname 	varchar(10) 	not null,
-			gender 	char(1) 		not null,
-			sid 	int,
-			stdate 	datetime,
-			constraint fk_sid_student 		foreign key(sid)
-											references subject(sid)
+			stid    int             primary key     auto_increment,
+			sname   varchar(10)     not null,
+			gender  char(1)         not null,
+			sid     int,
+			stdate  datetime,
+			constraint fk_sid_student       foreign key(sid)
+	                                        references subject(sid)
 		);
 		
 		show tables;
@@ -268,12 +268,12 @@ desc department;
 
 	-- (3) 교수
 		create table professor(
-			pid	 	int 			primary key 	auto_increment,
-			name 	varchar(10) 	not null,
-			sid 	int,
-			pdate 	datetime,
-			constraint fk_sid_professor 	foreign key(sid)
-											references student(sid)
+			pid     int             primary key     auto_increment,
+			name    varchar(10)     not null,
+			sid     int,
+			pdate   datetime,
+			constraint fk_sid_professor     foreign key(sid)
+	                                        references student(sid)
 		);
 		
 		show tables;
