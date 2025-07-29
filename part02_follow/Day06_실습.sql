@@ -237,6 +237,7 @@ select * from emp;
 -- ㄴ 부모의 참조 컬럼이 삭제되면 자식의 행이 함께 삭제됨
 -- - 뉴스 테이블의 기사 컬럼이 삭제되며 댓글 테이블의 댓글도 함께 삭제되는 경우
 -- - 게시판의 게시글 삭제 시 게시글의 댓글이 함께 삭제되는 경우
+
 	create table board(
 		bid 		int 			primary key 	auto_increment,
 		title 		varchar(100) 	not null,
@@ -280,43 +281,140 @@ select * from emp;
 	select * from information_schema.triggers;
     
     -- 트리거 생성 : dept 테이블의 row 삭제시(dept_id 컬럼 포함), 참조하는 emp 테이블의 dept_id에 null값 업데이트
-	delimiter $$
-	
-	-- (1) create trigger [트리거명]
-		create trigger trg_dept_dept_id_delete -- 네이밍시 포함하는 컬럼과 포함하는 테이블 명칭을 포함시킴
-		after delete on dept -- 테이블명 / 업데이트 등은 애프터로 들어감
-		for each row
-		begin
+		delimiter $$
 		
-	-- (2) 참조하는 emp 테이블의 dept_id에 null값 업데이트
-		update emp
-			set dept_id = null
-            where dept_id = old.dept_id; -- old.dept_id : dept 테이블에서 삭제된 dept_id
-	
-	end $$
-	delimiter ;
+		-- (1) create trigger [트리거명]
+			create trigger trg_dept_dept_id_delete -- 네이밍시 포함하는 컬럼과 포함하는 테이블 명칭을 포함시킴
+			after delete on dept -- 테이블명 / 업데이트 등은 애프터로 들어감
+			for each row
+			begin
+			
+		-- (2) 참조하는 emp 테이블의 dept_id에 null값 업데이트
+			update emp
+				set dept_id = null
+				where dept_id = old.dept_id; -- old.dept_id : dept 테이블에서 삭제된 dept_id
+		
+		end $$
+		delimiter ;
     
 	select * from information_schema.triggers;
-    select * from dept;
-    select * from emp;
     
-    -- dept 테이블의 ACC 부서 삭제
-		delete from dept where dept_id = 'ACC'; -- emp의 dept_id가 not null로 되어 있어 삭제가 안됨
+    -- 부서 테이블 삭제
+		select * from dept;
+		select * from emp;
     
-    -- emp 테이블의 dept_id 컬럼 null 허용으로 변경
-		alter table emp
-			modify column dept_id char(3) null;
-            
-		desc emp;
+		-- dept 테이블의 ACC 부서 삭제
+			delete from dept where dept_id = 'ACC'; -- emp의 dept_id가 not null로 되어 있어 삭제가 안됨
+		
+		-- emp 테이블의 dept_id 컬럼 null 허용으로 변경
+			alter table emp
+				modify column dept_id char(3) null;
+				
+			desc emp;
+			desc dept;
 
 -- 2번 방법은 오라클 데이터베이스에서는 트리거 실행 가능
 -- innoDB 형식의 데이터베이스인 mysql, maria는 트리거 실행 불가능
 -- 이유는 innoDB 형식은 트리거 실행 전 참조관계를 먼저 체크하여 에러 발생시킴
 
 -- > 퍼플렉시티 AI에게 해결 방안 : 아래 코드 실행 후 ACC 부서 삭제 진행하면 에러없이 진행됨
--- 	ALTER TABLE emp DROP FOREIGN KEY fk_dept_id; 
+-- 	ALTER TABLE emp DROP FOREIGN KEY fk_dept_id;
 
--- -----------------------------------------------------------------------------------------------------------------------------------------------
+/*------------------------------------------------------------------------------------------------------------------------------------------------
+
+	키(외래키, primary key 등)를 건드리지 않고
+	즉, 외래키 제약조건(ON DELETE CASCADE, ON DELETE SET NULL 등)을 바꾸거나 삭제하지 않고
+    기존 관계 그대로 두면서 “부모(dept) 행 삭제 시 자식(emp)의 참조 컬럼을 null로 변경”하는 동작을 하고 싶다면
+	MySQL(InnoDB)은 기술적으로 이게 불가능합니다.
+
+	왜냐하면?
+	InnoDB 스토리지 엔진은
+	트리거 실행 전에 무결성(참조관계) 위반 여부를 먼저 검사합니다.
+
+	즉, 부모 행을 삭제하면 바로 외래키 제약조건(FK RESTRICT/NO ACTION 등)에 위배되어
+	트리거가 실행될 기회조차 주지 않고 에러(1451번)로 막아버립니다.
+
+	그래서 키(FK)를 건드리지 않는 한, 트리거나 어떤 프로시저로도 우회가 불가합니다.
+
+	현실적인 방법 및 권장 프로세스
+	사전에 트랜잭션 내에서 아래 순서로 진행
+
+	(1) 먼저 자식 테이블(emp)의 참조 컬럼을 수동으로 null로 업데이트
+
+	(2) 그 후 부모 행을 삭제
+
+	예시)
+
+	sql
+	START TRANSACTION;
+		update emp set dept_id = null where dept_id = 'ACC';
+		delete from dept where dept_id = 'ACC';
+	COMMIT;
+	이렇게 하면 키를 절대 건드리지 않고 순차적으로 무결성을 지킬 수 있음
+
+	뷰나 저장 프로시저를 활용
+
+	이런 과정을 프로시저로 만들어 사용하면 실수 방지 및 일관성 유지에 도움
+
+	예시:
+
+	sql
+	DELIMITER $$
+	CREATE PROCEDURE delete_dept_and_null_emp(p_dept_id CHAR(3))
+	BEGIN
+	  update emp set dept_id = null where dept_id = p_dept_id;
+	  delete from dept where dept_id = p_dept_id;
+	END $$
+	DELIMITER ;
+	사용: CALL delete_dept_and_null_emp('ACC');
+
+	결론 정리
+	키(외래키)를 건드리지 않는 한, 트리거만으로는 불가 (InnoDB 특성 때문)
+
+	대안: 수동 update → delete 순서로 코드 작성 (직접 실행 또는 프로시저화)
+
+	이 방법은 무결성을 해치지 않고, DB 구조(키)도 변화시키지 않으면서 원하는 동작을 실현할 수 있는 가장 표준적인 방법입니다.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+-- 사원 테이블의 급여 변경시 로그 저장 :: 트리거 업데이트 이용
+    
+    -- 테이블 생성
+		create table salary_log(
+			emp_id 			char(5) 	primary key,
+			old_salary 		int,
+			new_salary 		int,
+			change_date 	date
+		);
+		
+		desc salary_log;
+    
+    -- 트리거 생성 : dept 테이블의 row 삭제시(dept_id 컬럼 포함), 참조하는 emp 테이블의 dept_id에 null값 업데이트
+		delimiter $$
+		
+		-- (1) create trigger [트리거명]
+			create trigger trg_salary_update -- 네이밍시 포함하는 컬럼과 포함하는 테이블 명칭을 포함시킴
+			after update on employee -- 테이블명 / 업데이트 등은 애프터로 들어감
+			for each row
+			begin
+			
+		-- (2) 사원 테이블의 급여 변경시 로그 저장, old.salary(기존 급여), new.salary(새로운 급여)
+			if old.salary <> new.salary then
+				insert into salary_log(emp_id, old_salary, new_salary, change_date)
+							values(old.emp_id, old.salary, new.salary, now());
+			end if;
+		end $$
+		delimiter ;
+    
+		select * from information_schema.triggers;
+    
+    -- 변경 내역 확인
+		select * from salary_log;
+		
+		update employee set salary = 1000
+			where emp_id = 'S0020';
+		
+		select * from salary_log;
 
 
 

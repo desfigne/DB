@@ -87,17 +87,8 @@ order by emp_id;
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
--- inner join : ANSI SQL 표준, 대부분의 RDBMS(mssql, mysql 등)에서 권장
--- (INNER JOIN ... ON ... 형태로 명확하게 작성)
-
-	select *
-	-- select count(*)
-	from employee inner join department
-		 on employee.dept_id = department.dept_id
-	order by emp_id;
-
--- inner join : 기본 SQL 방식, 오라클·MySQL 등에서 사용 가능 (3개 테이블)
--- (직접 FROM에 ,로 다 나열 + WHERE에서 각각 연결)
+-- (1) 기본 SQL 방식, 오라클·MySQL 등에서 사용 가능 (3개 테이블)
+-- ㄴ 직접 FROM에 ,로 다 나열 + WHERE에서 각각 연결)
 -- ** 전략기획에 인원이 없어도 전략기획이 나타나려면 OUTER JOIN
 
 	select *
@@ -110,14 +101,19 @@ order by emp_id;
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
 
--- inner join : ANSI SQL 표준, 대부분의 RDBMS에서 권장 (3개 테이블)
+-- (2) ANSI SQL 표준, 대부분의 RDBMS(mssql, mysql 등)에서 권장
+-- ㄴ INNER JOIN ... ON ... 형태로 명확하게 작성
 
 	select *
-	from employee e
-		 inner join department d on e.dept_id = d.dept_id
-		 inner join unit u on d.unit_id = u.unit_id;
+	-- select count(*)
+	from employee inner join department
+		 on employee.dept_id = department.dept_id
+	order by emp_id;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
--- inner join : 기본 SQL 방식, 오라클·MySQL 등에서 사용 가능 (4개 테이블)
+-- (1) 기본 SQL 방식, 오라클·MySQL 등에서 사용 가능 (4개 테이블)
 
 	select *
 	from employee e, department d, unit u, vacation v
@@ -126,7 +122,14 @@ order by emp_id;
 		  and e.emp_id = v.emp_id
 	order by e.emp_id;
 
--- inner join : ANSI SQL 표준, 대부분의 RDBMS에서 권장 (4개 테이블)
+-- (2) ANSI SQL 표준, 대부분의 RDBMS에서 권장 (3개 테이블)
+
+	select *
+	from employee e
+		 inner join department d on e.dept_id = d.dept_id
+		 inner join unit u on d.unit_id = u.unit_id;
+
+-- (2) ANSI SQL 표준, 대부분의 RDBMS에서 권장 (4개 테이블)
 
 	select *
 	from employee e

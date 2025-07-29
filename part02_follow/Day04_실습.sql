@@ -483,33 +483,17 @@ create table emp(
 desc emp;
 select * from employee;
 
-insert into emp(emp_id, ename, gender, hire_date, salary)
-	        values('s001', '홍길동', 'm', now(), '1000'); -- 정석적인 방식은 타입을 맞춰서 1:1 매핑 순서 준수해야 함
-    
--- -----------------------------------------------------------------------
+insert into emp(emp_id, ename, gender, hire_date, salary) values('s001', '홍길동', 'm', now(), '1000'); -- 정석적인 방식은 타입을 맞춰서 1:1 매핑 순서 준수해야 함
 
-insert into emp(ename, emp_id, gender, hire_date, salary)
-	        values('s001', '홍길동', 'm', now(), '1000'); -- 키 정의가 없어 중복된 내용이 들어갈 수 있음
-    
--- -----------------------------------------------------------------------
+insert into emp(ename, emp_id, gender, hire_date, salary) values('s001', '홍길동', 'm', now(), '1000'); -- 키 정의가 없어 중복된 내용이 들어갈 수 있음
 
-insert into emp(ename, emp_id, gender, salary, hire_date)
-	        values('s001', '홍길동', 'm', now(), '1000'); -- 데이트타임 타입과 인트 타입이 1:1 매핑이 되지 않아 에러 발생하는 케이스
-    
--- -----------------------------------------------------------------------
+insert into emp(ename, emp_id, gender, salary, hire_date) values('s001', '홍길동', 'm', now(), '1000'); -- 데이트타임 타입과 인트 타입이 1:1 매핑이 되지 않아 에러 발생하는 케이스
 
-insert into emp(ename, emp_id, gender, salary, hire_date)
-	        values('s001', '홍길동', 'm', '1000'); -- 타입 개수와 값의 개수를 맞추지 않아 에러 발생하는 케이스
-    
--- -----------------------------------------------------------------------
+insert into emp(ename, emp_id, gender, salary, hire_date) values('s001', '홍길동', 'm', '1000'); -- 타입 개수와 값의 개수를 맞추지 않아 에러 발생하는 케이스
 
-insert into emp(ename, emp_id, gender, salary, hire_date)
-	        values('s001', '홍길동', 'm', '1000', null); -- desc emp 출력 후 null 값 정의 보면 YES로 되어 있어 null 값 들어감
+insert into emp(ename, emp_id, gender, salary, hire_date) values('s001', '홍길동', 'm', '1000', null); -- desc emp 출력 후 null 값 정의 보면 YES로 되어 있어 null 값 들어감
     
--- -----------------------------------------------------------------------
-
-insert into emp(emp_id)
-	        values('s002'); -- null 허용 컬럼은 null 입력하지 않아도 디폴트로 자동으로 null이 들어감
+insert into emp(emp_id) values('s002'); -- null 허용 컬럼은 null 입력하지 않아도 디폴트로 자동으로 null이 들어감
 
 select * from emp;
 
@@ -545,26 +529,14 @@ create table emp(
 desc emp;
 insert into emp(emp_id, ename, gender, hire_date, salary)
 	        values('s001', '홍길동', 'm', now(), 1000); -- into 없이 insert만 입력해야하는 db 종류가 있고, into를 포함해야하는 db가 있음
-    
--- -----------------------------------------------------------------------
 
-insert into emp
-	        values('s002', '이순신', 'm', sysdate(), 2000); -- 빼고 진행할 수 있으나 넣고 진행하는 것을 추천
-    
--- -----------------------------------------------------------------------
+insert into emp values('s002', '이순신', 'm', sysdate(), 2000); -- 빼고 진행할 수 있으나 넣고 진행하는 것을 추천
 
-insert into emp -- 
-	        values(3000, 's003', '김유신', 'm', sysdate()); -- 지정된 입력 값 범위()를 벗어나 에러 발생하는 케이스
-    
--- -----------------------------------------------------------------------
+insert into emp values(3000, 's003', '김유신', 'm', sysdate()); -- 지정된 입력 값 범위()를 벗어나 에러 발생하는 케이스
 
-insert into emp -- 
-	        values('s003', null, 'm', sysdate(), 2000); -- null 비허용으로 에러 발생하는 케이스
-    
--- -----------------------------------------------------------------------
+insert into emp values('s003', null, 'm', sysdate(), 2000); -- null 비허용으로 에러 발생하는 케이스
 
-insert into emp -- 
-	        values('s003', '김유신', 'm', sysdate(), 3000);
+insert into emp values('s003', '김유신', 'm', sysdate(), 3000);
          
 desc emp; -- desc 상의 필드 순서대로 입력됨
 select * from emp;
@@ -773,8 +745,6 @@ select * from emp;
 	-- truncate는 row 그 자체를 없애버려서 복구가 안됨, delete는 표시처리로 진행해 복구됨
 
 	rollback; -- 오토커밋은 대부분 비활성화(disable = false)가 디폴트임, mysql은 디폴트(enable = ture)가 활성화되어 롤백 동작안함, 실행시마다 트랜젝션이 완료, 완료 처리되고 있는 상태
-    
--- -----------------------------------------------------------------------
 
 -- s004 사원 삭제
 

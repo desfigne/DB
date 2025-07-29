@@ -32,6 +32,12 @@ select * from customer;
 
 -- : point
 -- > 고객 포인트
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+DESC CUSTOMER;
+SELECT * FROM CUSTOMER;
 
 
 
@@ -50,6 +56,12 @@ select * from employee;
 
 -- : hire_date / retire_date
 -- > 직원 입사일 / 직원 퇴사일
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+DESC EMPLOYEE;
+SELECT * FROM EMPLOYEE;
 
 
 
@@ -65,6 +77,12 @@ select * from product;
 
 -- : sub_category_id
 -- > 하위 카테고리 코드
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+DESC PRODUCT;
+SELECT * FROM PRODUCT;
 
 
 
@@ -83,6 +101,12 @@ select * from order_header;
 
 -- : sub_total / delivery_fee / total_due
 -- > 제품 금액(왜 서브가 붙어있는지...?) / 배송비 / 총합 금액
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+DESC ORDER_HEADER;
+SELECT * FROM ORDER_HEADER;
 
 
 
@@ -98,6 +122,12 @@ select * from order_detail;
 
 -- : order_qty / unit_price / discount / line_total
 -- > 제품 주문 수량 / 제품 금액 / 할인가(총합 금액에서 1회 단일 할인) / 할인 제외 종합 금액
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+DESC ORDER_DETAIL;
+SELECT * FROM ORDER_DETAIL;
 
 
 
@@ -108,7 +138,13 @@ select * from order_detail;
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 select * from customer;
-select customer_id, customer_name, gender, email, phone from customer;
+select customer_id, customer_name, city, gender, email, phone from customer;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_ID, CUSTOMER_NAME, CITY, GENDER, EMAIL, PHONE 
+	FROM CUSTOMER;
 
 
 
@@ -120,6 +156,13 @@ select customer_id, customer_name, gender, email, phone from customer;
 
 select * from employee;
 select employee_name, employee_id, gender, hire_date, phone from employee;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT * FROM EMPLOYEE;
+SELECT EMPLOYEE_NAME, EMPLOYEE_ID, GENDER, HIRE_DATE, PHONE
+	FROM EMPLOYEE;
 
 
 
@@ -131,6 +174,13 @@ select employee_name, employee_id, gender, hire_date, phone from employee;
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where customer_name ='홍길동';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE CUSTOMER_NAME = '홍길동';
 
 
 
@@ -142,6 +192,13 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where gender = 'F';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE GENDER = 'F';
 
 
 
@@ -153,6 +210,13 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where city = '울산';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE CITY = '울산';
 
 
 
@@ -164,6 +228,13 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where point >= 500000;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE GENDER = 'F';
 
 
 
@@ -176,6 +247,16 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where customer_name = null; -- 조회 안됨
 select customer_name, customer_id, gender, city, phone, point from customer where customer_name is null;
+-- ㄴ 오답, 이름에 값 자체가 없는 경우에 is null 사용
+
+select customer_name, customer_id, gender, city, phone, point from customer where customer_name like '% %';
+
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE CUSTOMER_NAME LIKE '% %';
 
 
 
@@ -187,6 +268,13 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where phone not like '010%';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE PHONE NOT LIKE '010%';
 
 
 
@@ -198,6 +286,13 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where point >= 500000 and city = '서울';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE POINT >= 500000 AND CITY = '서울';
 
 
 
@@ -209,6 +304,16 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where point >= 500000 and city not like '서울';
+-- ㄴ 오답, 출력 결과값은 동일하게 나오나 특정 단어를 칭할때는 != 또는 <>를 사용, 패턴을 포함 및 제외할 경우에 like를 쓰는게 더 바람직함
+
+select customer_name, customer_id, gender, city, phone, point from customer where point >= 500000 and city != '서울';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE POINT >= 500000 AND CITY != '서울';
 
 
 
@@ -220,6 +325,13 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where point >= 400000 and city = '서울' and gender ='M';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE POINT >= 400000 AND CITY = '서울' AND GENDER = 'M';
 
 
 
@@ -231,6 +343,16 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where city = '강릉' or city = '원주';
+-- ㄴ 오답, 출력 결과값은 동일하게 나오나 조건 대상이 많아질 때 여러 값을 한번에 지정할 수 있어 더 간결하고 직관적임
+
+select customer_name, customer_id, gender, city, phone, point from customer where city in ('강릉', '원주');
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE CITY IN ('강릉', '원주');
 
 
 
@@ -242,6 +364,16 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where city = '서울' or city = '부산' or city = '제주' or city = '인천';
+-- ㄴ 오답, 출력 결과값은 동일하게 나오나 조건 대상이 많아질 때 여러 값을 한번에 지정할 수 있어 더 간결하고 직관적임
+
+select customer_name, customer_id, gender, city, phone, point from customer where city in ('서울', '부산', '제주', '인천');
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE CITY IN ('서울', '부산', '제주', '인천');
 
 
 
@@ -253,6 +385,16 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, point from customer where point >= 400000 and point <= 500000;
+-- ㄴ 오답, 출력 결과값은 동일하게 나오나 쿼리가 더 짧고 이해하기 쉬워 실무에서 선호됨
+
+select customer_name, customer_id, gender, city, phone, point from customer where point between 400000 and 500000;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, POINT
+	FROM CUSTOMER
+    WHERE POINT BETWEEN 400000 AND 500000 ;
 
 
 
@@ -264,6 +406,24 @@ select customer_name, customer_id, gender, city, phone, point from customer wher
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, birth_date, point from customer where birth_date like '1990-%';
+-- ㄴ 오답, 출력 결과값은 동일하게 나오나 다른 접근 방식, 둘 다 문자열 함수와 데이터 타입끼리 내부적으로 변환이 필요할 수 있음
+
+select customer_name, customer_id, gender, city, phone, birth_date, point from customer where left(birth_date, 4) = '1990';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, BIRTH_DATE, POINT
+	FROM CUSTOMER
+    WHERE LEFT(BIRTH_DATE,4) = '1990' ;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- < 퍼플렉시티가 답변한 가독성 및 표준성 측면에서의 답 >
+
+	SELECT customer_name, customer_id, gender, city, phone, birth_date, point
+	FROM customer
+	WHERE year(birth_date) = 1990;
 
 
 
@@ -275,6 +435,16 @@ select customer_name, customer_id, gender, city, phone, birth_date, point from c
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, birth_date, point from customer where gender = 'F' and birth_date like '1990-%';
+-- ㄴ 오답, 출력 결과값은 동일하게 나오나 다른 접근 방식
+
+select customer_name, customer_id, gender, city, phone, birth_date, point from customer where left(birth_date, 4) = '1990' and gender = 'F';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, BIRTH_DATE, POINT
+	FROM CUSTOMER
+    WHERE LEFT(BIRTH_DATE,4) = '1990' AND GENDER ='F' ; 
 
 
 
@@ -286,6 +456,24 @@ select customer_name, customer_id, gender, city, phone, birth_date, point from c
 
 select * from customer;
 select customer_name, customer_id, gender, city, phone, birth_date, point from customer where gender = 'M' and birth_date like '1990-%' and (city ='대구' or city = '경주');
+-- ㄴ 오답, 출력 결과값은 동일하게 나오나 다른 접근 방식으로 강사님 쿼리가 가독성과 유지보수 측면에서 더 권장
+
+select customer_name, customer_id, gender, city, phone, birth_date, point from customer where left(birth_date, 4) = '1990' and city in ('대구', '경주') and gender = 'M';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, BIRTH_DATE, POINT
+	FROM CUSTOMER
+    WHERE LEFT(BIRTH_DATE,4) = '1990' AND CITY IN ('대구', '경주') AND GENDER ='M' ; 
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- < 퍼플렉시티가 답변한 가독성 및 표준성 측면에서의 답 >
+
+	SELECT CUSTOMER_NAME, CUSTOMER_ID, GENDER, CITY, PHONE, BIRTH_DATE, POINT
+		FROM CUSTOMER
+		WHERE year(BIRTH_DATE,4) = '1990' AND CITY IN ('대구', '경주') AND GENDER ='M' ; 
 
 
 
@@ -297,7 +485,24 @@ select customer_name, customer_id, gender, city, phone, birth_date, point from c
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 select * from customer;
-select concat(customer_name, '(', customer_id, ')') as '이름(아이디)', gender, city, phone, birth_date, point from customer where gender = 'M' and birth_date like '1990-%';
+select concat(customer_name, '(', customer_id, ')') as '이름(아이디)', gender, city, phone, birth_date, pointfrom customer where gender = 'M' and birth_date like '1990-%';
+-- ㄴ 오답, 출력 결과값은 동일하게 나오나 다른 접근 방식
+
+select concat(customer_name, '(', customer_id, ')') customer_name, gender, city, phone, birth_date, pointfrom customer where left(birth_date, 4) = '1990' and gender = 'M';
+
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CONCAT(CUSTOMER_NAME, '(', CUSTOMER_ID, ')') CUSTOMER_NAME, GENDER, CITY, PHONE, BIRTH_DATE, POINT
+	FROM CUSTOMER
+    WHERE LEFT(BIRTH_DATE,4) = '1990' AND GENDER ='M' ; 
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- < 퍼플렉시티가 답변한 가독성 및 표준성 측면에서의 답 >
+
+	select concat(customer_name, '(', customer_id, ')') customer_name, gender, city, phone, birth_date, pointfrom customer
+	where year(birth_date, 4) = '1990' and gender = 'M';
 
 
 
@@ -309,6 +514,14 @@ select concat(customer_name, '(', customer_id, ')') as '이름(아이디)', gend
 
 select * from employee;
 select employee_name, employee_id, gender, phone, hire_date from employee where retire_date is null;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT * FROM EMPLOYEE;
+SELECT EMPLOYEE_NAME, EMPLOYEE_ID, GENDER, PHONE, HIRE_DATE
+	FROM EMPLOYEE
+	WHERE RETIRE_DATE IS NULL;
 
 
 
@@ -321,6 +534,15 @@ select employee_name, employee_id, gender, phone, hire_date from employee where 
 select * from employee;
 select employee_name, employee_id, gender, phone, hire_date from employee where gender = 'M' and retire_date is null;
 
+select employee_name, employee_id, gender, phone, hire_date from employee where retire_date is null and gender = 'M';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT EMPLOYEE_NAME, EMPLOYEE_ID, GENDER, PHONE, HIRE_DATE
+	FROM EMPLOYEE
+	WHERE RETIRE_DATE IS NULL AND GENDER = 'M';
+
 
 
 /*________________________________________________________________________________________________________________________________________________
@@ -331,6 +553,13 @@ select employee_name, employee_id, gender, phone, hire_date from employee where 
 
 select * from employee;
 select employee_name, employee_id, gender, phone, hire_date from employee where retire_date is not null;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT EMPLOYEE_NAME, EMPLOYEE_ID, GENDER, PHONE, HIRE_DATE
+	FROM EMPLOYEE
+	WHERE RETIRE_DATE IS NOT NULL;
 
 
 
@@ -344,6 +573,14 @@ select employee_name, employee_id, gender, phone, hire_date from employee where 
 select * from order_header;
 select order_id, customer_id, employee_id, order_date, sub_total, delivery_fee, total_due from order_header where order_date >= '2019-01-01' and order_date <= '2019-01-07' order by customer_id asc;
 select order_id, customer_id, employee_id, order_date, sub_total, delivery_fee, total_due from order_header where order_date between '2019-01-01' and '2019-01-07' order by customer_id asc;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT * FROM ORDER_HEADER;
+SELECT ORDER_ID, CUSTOMER_ID, EMPLOYEE_ID, ORDER_DATE, SUB_TOTAL, DELIVERY_FEE, TOTAL_DUE
+	FROM ORDER_HEADER
+	WHERE ORDER_DATE BETWEEN '2019-01-01' AND '2019-01-07';
 
 
 
@@ -357,6 +594,14 @@ select order_id, customer_id, employee_id, order_date, sub_total, delivery_fee, 
 select * from order_header;
 select order_id, customer_id, employee_id, order_date, sub_total, delivery_fee, total_due from order_header where order_date >= '2019-01-01' and order_date <= '2019-01-07' order by total_due desc;
 select order_id, customer_id, employee_id, order_date, sub_total, delivery_fee, total_due from order_header where order_date between '2019-01-01' and '2019-01-07' order by total_due desc;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT ORDER_ID, CUSTOMER_ID, EMPLOYEE_ID, ORDER_DATE, SUB_TOTAL, DELIVERY_FEE, TOTAL_DUE
+	FROM ORDER_HEADER
+	WHERE ORDER_DATE BETWEEN '2019-01-01' AND '2019-01-07'
+    ORDER BY TOTAL_DUE DESC;
 
 
 
@@ -370,6 +615,14 @@ select order_id, customer_id, employee_id, order_date, sub_total, delivery_fee, 
 select * from order_header;
 select order_id, customer_id, employee_id, order_date, sub_total, delivery_fee, total_due from order_header where order_date >= '2019-01-01' and order_date <= '2019-01-07' order by employee_id asc, order_date desc;
 select order_id, customer_id, employee_id, order_date, sub_total, delivery_fee, total_due from order_header where order_date between '2019-01-01' and '2019-01-07' order by employee_id asc, order_date desc;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT ORDER_ID, CUSTOMER_ID, EMPLOYEE_ID, ORDER_DATE, SUB_TOTAL, DELIVERY_FEE, TOTAL_DUE
+	FROM ORDER_HEADER
+	WHERE ORDER_DATE BETWEEN '2019-01-01' AND '2019-01-07'
+    ORDER BY EMPLOYEE_ID ASC, ORDER_DATE DESC;
 
 
 
@@ -400,8 +653,14 @@ ________________________________________________________________________________
 
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-select * from customer;
-select count(*) 고객수, format(sum(point), 0) 포인트총합 from customer;
+SELECT SUM(POINT) FROM CUSTOMER;
+SELECT CONCAT(FORMAT(SUM(POINT),0), '원') AS POINT FROM CUSTOMER;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT SUM(POINT) FROM CUSTOMER;
+SELECT CONCAT(FORMAT(SUM(POINT),0), '원') AS POINT FROM CUSTOMER;
 
 
 
@@ -413,6 +672,19 @@ select count(*) 고객수, format(sum(point), 0) 포인트총합 from customer;
 
 select * from customer;
 select city 지역, count(*) 고객수, format(sum(point), 0) 포인트총합 from customer where city = '서울';
+-- ㄴ 오답, 강사님의 쿼리는 concat과 format 함수를 사용해 깔끔하게 합계만 조회함
+
+select sum(point) from customer where city = '서울';
+select concat(format(sum(point), 0), '원') as point from customer where city = '서울';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT SUM(POINT) FROM CUSTOMER 
+	WHERE CITY = '서울';
+SELECT CONCAT(FORMAT(SUM(POINT),0), '원') AS POINT 
+	FROM CUSTOMER
+    WHERE CITY = '서울';
 
 
 
@@ -424,6 +696,12 @@ select city 지역, count(*) 고객수, format(sum(point), 0) 포인트총합 fr
 
 select * from customer;
 select city 지역, count(*) 고객수 from customer where city = '서울';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT COUNT(*) FROM CUSTOMER
+	WHERE CITY = '서울';
 
 
 
@@ -435,6 +713,12 @@ select city 지역, count(*) 고객수 from customer where city = '서울';
 
 select * from customer;
 select city 지역, count(*) 고객수, format(sum(point), 0) 포인트총합, format(avg(point), 0) 포인트평균 from customer where city = '서울';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT SUM(POINT), AVG(POINT) FROM CUSTOMER
+	WHERE CITY = '서울';
 
 
 
@@ -446,6 +730,12 @@ select city 지역, count(*) 고객수, format(sum(point), 0) 포인트총합, f
 
 select * from customer;
 select city 지역, count(*) 고객수, format(sum(point), 0) 포인트총합, format(avg(point), 0) 포인트평균, format(max(point), 0) 포인트최대값, format(min(point), 0) 포인트최소값 from customer where city = '서울';
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT SUM(POINT), AVG(POINT), MAX(POINT), MIN(POINT)
+	FROM CUSTOMER WHERE CITY = '서울';
 
 
 
@@ -457,6 +747,37 @@ select city 지역, count(*) 고객수, format(sum(point), 0) 포인트총합, f
 
 select * from customer;
 select gender 성, count(*) 고객수 from customer group by gender;
+-- ㄴ 오답, 출력 결과값은 동일하게 나오나 다른 접근 방식으로 강사님 쿼리는 case 문을 사용해 성별 구분을 명시적으로 표현함
+
+select case gender when 'M' then '남자' else '여자' end as gender, count(gender) from customer group by gender;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT GENDER, COUNT(GENDER) FROM CUSTOMER GROUP BY GENDER;
+
+SELECT  CASE GENDER
+			WHEN 'M'  THEN '남자'
+			ELSE '여자'
+        END
+        AS GENDER
+        , COUNT(GENDER) 
+FROM CUSTOMER 
+GROUP BY GENDER;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- < 퍼플렉시티가 답변한 가독성 및 표준성 측면에서의 답 >
+
+	SELECT 
+		CASE gender
+			WHEN 'M' THEN '남자'
+			WHEN 'F' THEN '여자'
+			ELSE '기타'
+		END AS 성별,
+		COUNT(*) AS 고객수
+	FROM customer
+	GROUP BY gender;
 
 
 
@@ -469,6 +790,13 @@ select gender 성, count(*) 고객수 from customer group by gender;
 
 select * from customer;
 select city 지역, count(*) 고객수 from customer group by city order by city asc;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CITY, COUNT(CITY) 
+	FROM CUSTOMER 
+    GROUP BY CITY;
 
 
 
@@ -481,6 +809,27 @@ select city 지역, count(*) 고객수 from customer group by city order by city
 
 select * from customer;
 select city 지역, count(*) 고객수 from customer group by city having count(*) >= 10 order by city asc;
+-- ㄴ 정답, 출력 결과값은 동일하게 나오나 강사님 쿼리의 count는 sql 예약어(함수)이고, 집계 함수 결과에 바로 조건을 걸 때는
+-- 	  count(city)처럼 함수 형태를 사용해야 함, 또한 별칭()을 having에서 사용해야 하지만 별칭 비교는 mysql에서는 가능하나 일부 DBMS에서는 안되므로
+-- 	  혼동의 소지가 있음, 또한 정렬 구문(order by)이 빠져있어 '지역 지음을 기준으로 오름차순 정렬' 조건이 반영되지 않음
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CITY, COUNT(CITY) COUNT
+	FROM CUSTOMER 
+    GROUP BY CITY
+    HAVING COUNT >= 10;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- < 퍼플렉시티가 답변한 가독성 및 표준성 측면에서의 답 >
+
+	SELECT CITY, COUNT(*) AS 고객수
+	FROM CUSTOMER
+	GROUP BY CITY
+	HAVING COUNT(*) >= 10
+	ORDER BY CITY ASC;
 
 
 
@@ -492,6 +841,29 @@ select city 지역, count(*) 고객수 from customer group by city having count(
 
 select * from customer;
 select gender 성, format(sum(point), 0) 포인트총합 from customer group by gender;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT GENDER, SUM(POINT) FROM CUSTOMER GROUP BY GENDER;
+
+SELECT CASE GENDER WHEN 'M' THEN '남자'
+		ELSE '여자' END AS GENDER, SUM(POINT)
+	FROM CUSTOMER
+    GROUP BY GENDER;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- < 퍼플렉시티가 답변한 가독성 및 표준성 측면에서의 답 >
+
+	SELECT 
+		CASE gender
+			WHEN 'M' THEN '남자'
+			ELSE '여자'
+		END AS 성별,
+		FORMAT(SUM(point), 0) AS 포인트총합
+	FROM customer
+	GROUP BY gender;
 
 
 
@@ -504,6 +876,14 @@ select gender 성, format(sum(point), 0) 포인트총합 from customer group by 
 
 select * from customer;
 select city 지역, format(sum(point), 0) 포인트총합 from customer group by city order by city asc;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CITY, SUM(POINT)
+	FROM CUSTOMER
+    GROUP BY CITY
+    ORDER BY CITY;
 
 
 
@@ -515,7 +895,29 @@ select city 지역, format(sum(point), 0) 포인트총합 from customer group by
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 select * from customer;
-select city 지역, format(sum(point), 0) 포인트총합 from customer group by city having sum(point) >= 1000000 order by city asc;
+select city 지역, format(sum(point), 0) 포인트총합 from customer group by city having sum(point) >= 1000000 order by city desc;
+-- ㄴ 정답, 출력 결과값은 동일하게 나오나 강사님 쿼리의 tot_point는 별칭()이므로 having에서 사용할 수 있지만
+-- 	  일부 DBMS(mysql emd)에서는 가능하나 일부 DBMS(oracle, sql server)에서는 허용하지 않음
+-- 	  호환성을 위해 having sum(point) >= 1000000으로 명확히 쓰는 것이 안전함
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CITY, SUM(POINT) TOT_POINT
+	FROM CUSTOMER
+    GROUP BY CITY
+    HAVING TOT_POINT >= 1000000
+    ORDER BY TOT_POINT DESC;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+-- < 퍼플렉시티가 답변한 가독성 및 표준성 측면에서의 답 >
+
+	SELECT city AS 지역, FORMAT(SUM(point), 0) AS 포인트총합
+	FROM customer
+	GROUP BY city
+	HAVING SUM(point) >= 1000000
+	ORDER BY SUM(point) DESC;
 
 
 
@@ -527,7 +929,15 @@ select city 지역, format(sum(point), 0) 포인트총합 from customer group by
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 select * from customer;
-select city 지역, format(sum(point), 0) 포인트총합 from customer group by city order by city desc;
+select city 지역, format(sum(point), 0) 포인트총합 from customer group by city order by 포인트총합 desc;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+  SELECT CITY, SUM(POINT) TOT_POINT
+	FROM CUSTOMER
+    GROUP BY CITY
+    ORDER BY TOT_POINT DESC; 
 
 
 
@@ -540,6 +950,14 @@ select city 지역, format(sum(point), 0) 포인트총합 from customer group by
 
 select * from customer;
 select city 지역, format(count(*), 0) 고객수, format(sum(point), 0) 포인트총합 from customer group by city order by city asc;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CITY, COUNT(CITY), SUM(POINT)
+	FROM CUSTOMER
+    GROUP BY CITY
+    ORDER BY CITY DESC;
 
 
 
@@ -552,6 +970,15 @@ select city 지역, format(count(*), 0) 고객수, format(sum(point), 0) 포인�
 
 select * from customer;
 select city 지역, format(sum(point), 0) 포인트총합, format(avg(point), 0) 포인트평균 from customer where point is not null group by city order by city asc;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CITY, SUM(POINT), AVG(POINT)
+	FROM CUSTOMER
+    WHERE POINT IS NOT NULL
+    GROUP BY CITY
+    ORDER BY CITY DESC;
 
 
 
@@ -562,12 +989,20 @@ select city 지역, format(sum(point), 0) 포인트총합, format(avg(point), 0)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-select * from customer;
 select city 지역, gender 성, format(sum(point), 0) 포인트총합, format(avg(point), 0) 포인트평균
 from customer
 where city in ('서울', '부산', '대구')
 group by city, gender
 order by city asc, gender asc;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT CITY, GENDER, SUM(POINT), AVG(POINT)
+	FROM CUSTOMER
+    WHERE CITY IN ('서울', '부산', '대구')
+    GROUP BY CITY, GENDER
+    ORDER BY CITY ASC, GENDER ASC;
 
 
 
@@ -586,7 +1021,7 @@ show tables;
 
 /*________________________________________________________________________________________________________________________________________________
 
-	order_header 테이블 사용
+    order_header 테이블 사용
     
 _________________________________________________________________________________________________________________________________________________*/
 
@@ -598,6 +1033,15 @@ ________________________________________________________________________________
 
 select * from order_header;
 select customer_id 고객아이디, format(sum(total_due), 0) 전체금액합 from order_header where order_date >= '2019-01-01 00:00:00' and order_date < '2019-02-01 00:00:00' group by customer_id;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT * FROM ORDER_HEADER;
+SELECT CUSTOMER_ID, SUM(TOTAL_DUE)
+	FROM ORDER_HEADER
+    WHERE LEFT(ORDER_DATE, 7) = '2019-01'
+    GROUP BY CUSTOMER_ID;
 
 
 
@@ -609,6 +1053,13 @@ select customer_id 고객아이디, format(sum(total_due), 0) 전체금액합 fr
 
 select * from order_header;
 select year(order_date) 연도, format(sum(total_due), 0) 전체금액합 from order_header group by year(order_date);
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT LEFT(ORDER_DATE, 4) '주문연도', SUM(TOTAL_DUE) '전체합계'
+	FROM ORDER_HEADER
+    GROUP BY LEFT(ORDER_DATE, 4);
 
 
 
@@ -620,6 +1071,14 @@ select year(order_date) 연도, format(sum(total_due), 0) 전체금액합 from o
 
 select * from order_header;
 select year(order_date) 연도, month(order_date) 월, format(sum(total_due), 0) 전체금액합 from order_header where order_date >= '2019-01-01 00:00:00' and order_date < '2019-07-01 00:00:00' group by year(order_date), month(order_date);
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT LEFT(ORDER_DATE, 4) 주문연도, SUBSTRING(ORDER_DATE, 6,2) 주문월, SUM(TOTAL_DUE) 전체금액
+	FROM ORDER_HEADER
+	WHERE LEFT(ORDER_DATE, 7) BETWEEN '2019-01' AND '2019-06'
+    GROUP BY LEFT(ORDER_DATE, 4), SUBSTRING(ORDER_DATE, 6,2);  
 
 
 
@@ -631,6 +1090,17 @@ select year(order_date) 연도, month(order_date) 월, format(sum(total_due), 0)
 
 select * from order_header;
 select year(order_date) 연도, month(order_date) 월, format(sum(total_due), 0) 전체금액합, format(avg(total_due), 0) 전체금액평균 from order_header where order_date >= '2019-01-01 00:00:00' and order_date < '2019-07-01 00:00:00' group by year(order_date), month(order_date);
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT 	LEFT(ORDER_DATE, 4) 주문연도, 
+		SUBSTRING(ORDER_DATE, 6,2) 주문월, 
+        SUM(TOTAL_DUE) 전체금액,
+        AVG(TOTAL_DUE) 평균
+	FROM ORDER_HEADER
+	WHERE LEFT(ORDER_DATE, 7) BETWEEN '2019-01' AND '2019-06'
+    GROUP BY LEFT(ORDER_DATE, 4), SUBSTRING(ORDER_DATE, 6,2);  
 
 
 
@@ -653,6 +1123,21 @@ SELECT
 FROM order_header
 GROUP BY YEAR(order_date), MONTH(order_date) WITH ROLLUP
 ORDER BY 연도, 월;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT  if(grouping(YEAR), '연도별 총합계', ifnull(YEAR, '-')) 주문연도,
+		IF(GROUPING(MONTH), '월별 총합계',  IFNULL(MONTH, '-')) 주문월,
+        SUM(TOTAL_DUE),
+        AVG(TOTAL_DUE)
+FROM	(SELECT LEFT(ORDER_DATE, 4) YEAR, 
+				SUBSTRING(ORDER_DATE, 6,2) MONTH,
+                TOTAL_DUE
+			FROM ORDER_HEADER
+		) T
+            GROUP BY YEAR, MONTH WITH ROLLUP
+;  -- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 이 코드 분해해서 공부하기
 
 
 
@@ -1030,6 +1515,98 @@ inner join order_header oh on oh.order_id = od.order_id
 inner join customer c on c.customer_id = oh.customer_id
 inner join employee e on e.employee_id = oh.employee_id
 where p.product_id between 'ED007' and 'ED009';
+
+
+
+
+
+
+/*================================================================================================================================================
+==================================================================================================================================================
+
+	서브쿼리
+    
+==================================================================================================================================================
+=================================================================================================================================================*/
+
+/*________________________________________________________________________________________________________________________________________________
+
+	Q01) 'mtkim', 'odoh', 'soyoukim', 'winterkim' 고객 주문의 주문번호, 고객아이디, 주문일시, 전체금액을 조회하세요.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	select * from order_header;
+
+
+
+/*________________________________________________________________________________________________________________________________________________
+
+	Q02) '전주' 지역 고객의 아이디를 조회하세요.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	
+
+
+
+/*________________________________________________________________________________________________________________________________________________
+
+	Q03) 위 두 쿼리문을 조합해서 하위 쿼리를 사용해 '전주' 지역 고객 주문의 주문번호, 고객아이디, 주문일시, 전체금액을 조회하세요.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	
+
+
+
+/*________________________________________________________________________________________________________________________________________________
+
+	Q04) 고객의 포인트 최댓값을 조회하세요.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	
+
+
+
+/*________________________________________________________________________________________________________________________________________________
+
+	Q05) 하위 쿼리를 사용해 가장 포인트가 많은 고객의 이름, 아이디, 등록일, 포인트를 조회하세요.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	
+
+
+
+/*________________________________________________________________________________________________________________________________________________
+
+	Q06) 하위 쿼리를 사용해 홍길동(gdhong) 고객보다 포인트가 많은 고객 이름, 아이디, 등록일, 포인트를 조회하세요.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	
+
+
+
+/*________________________________________________________________________________________________________________________________________________
+
+	Q07) 하위 쿼리를 사용해 홍길동(gdhong) 고객과 같은 지역의 고객 이름, 아이디, 지역, 등록일, 포인트를 조회하세요.
+	     단, 고객 이름을 기준으로 오름차순 정렬해서 조회하세요.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	
+
+
+
+/*________________________________________________________________________________________________________________________________________________
+
+	Q08) 하위 쿼리를 사용해 홍길동(gdhong) 고객보다 포인트가 많은 고객 이름, 아이디, 등록일, 포인트를 조회하고, 행번호를 추가하여 출력하세요.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+	
 
 
 
