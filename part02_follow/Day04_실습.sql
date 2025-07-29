@@ -262,8 +262,6 @@ show tables;
 -- > 영업부 부서의 사원 ~ 부서아이디까지 가져오고 그 다음에 정부시스템 부서의 사원 ~ 부서아이디까지 가져와 합침
 
 	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '영업');
-    
--- -----------------------------------------------------------------------
 
 	select emp_id, emp_name, salary, dept_id from employee where dept_id = (select dept_id from department where dept_name = '정보시스템');
     
@@ -552,11 +550,11 @@ select * from emp;
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 create table emp2(
-	emp_id		int				auto_increment		primary key, -- primary key : unique + not null (중복되면 안되고, not null되면 안될때 사용)
-	ename		varchar(10)		not null,
-	gender		char(1)			not null,
-	hire_date	date,
-	salary		int
+	emp_id 		int			auto_increment		primary key, -- primary key : unique + not null (중복되면 안되고, not null되면 안될때 사용)
+	ename 		varchar(10)		not null,
+	gender 		char(1)			not null,
+	hire_date 	date,
+	salary 		int
 );
 
 show tables;
