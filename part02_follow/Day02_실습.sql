@@ -492,3 +492,5 @@ select * from employee limit 3; -- mysql에만 limit 개념이 있고 다른 db�
 
 
 
+
+-- 
