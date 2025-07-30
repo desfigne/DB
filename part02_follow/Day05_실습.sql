@@ -461,47 +461,47 @@ desc department;
 
 	-- (1) 회원
 		create table member(
-			member_id 		int 			primary key 	auto_increment,
-			name 			varchar(50) 	not null,
-			email 			varchar(100) 	unique 			not null,
-			created_at 		datetime 		default 		current_timestamp
+			member_id       int             primary key     auto_increment,
+			name            varchar(50)     not null,
+			email           varchar(100)    unique          not null,
+			created_at      datetime        default         current_timestamp
 		);
 		
 		drop table member;
 
 	-- (2) 상품
 		create table product(
-			product_id 		int 			primary key 	auto_increment,
-			name 			varchar(100) 	not null,
-			price 			decimal(10,2) 	not null,
-			stock 			int 			default 		0
+			product_id      int             primary key     auto_increment,
+			name            varchar(100)    not null,
+			price           decimal(10,2)   not null,
+			stock           int             default         0
 		);
 		
 		drop table product;
 
 	-- (3) 주문
 		create table `order`(
-			order_id 		int 			primary key 	auto_increment,
-			member_id 		int,
-			order_date 		datetime 		default 		current_timestamp,
-			status 			varchar(20) 	default 		'주문완료',
-			constraint fk_order_member 		foreign key(member_id)
-											references member(member_id)
+			order_id        int             primary key     auto_increment,
+			member_id       int,
+			order_date      datetime        default         current_timestamp,
+			status          varchar(20)     default         '주문완료',
+			constraint fk_order_member      foreign key(member_id)
+	                                                references member(member_id)
 		);
 		
 		drop table `order`;
 
 	-- (4) 주문 상세
 		create table orderitem(
-			order_item_id 	int 			primary key 	auto_increment,
-			order_id 		int,
-			product_id 		int,
-			quantity 		int 			not null,
-			unit_price 		decimal(10, 2) 	not null,
+			order_item_id   int             primary key     auto_increment,
+			order_id        int,
+			product_id      int,
+			quantity        int             not null,
+			unit_price      decimal(10, 2)  not null,
 			constraint fk_orderitem_order 	foreign key(order_id)
-											references `order`(order_id),
+	                                                references `order`(order_id),
 			constraint fk_orderitem_product foreign key(product_id)
-											references product(product_id)
+	                                                references product(product_id)
 		);
 		
 		drop table orderitem;
