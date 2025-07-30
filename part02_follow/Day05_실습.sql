@@ -220,7 +220,7 @@ desc department;
 
 	학사관리 시스템 설계
     
-    (1) 과목(SUBJECT) 테이블은 
+	(1) 과목(SUBJECT) 테이블은 
 		컬럼 : SID(과목아이디), SNAME(과목명), SDATE(등록일:년월일 시분초)
 		SID는 기본키, 자동으로 생성한다.
         
