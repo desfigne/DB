@@ -48,7 +48,7 @@ select database();
 					from member m, `order` o, orderitem oi
 					where m.member_id = o.member_id 
 					and o.order_id = oi.order_id) t1 right outer join product p
-													on t1.product_id = p.product_id;
+											on t1.product_id = p.product_id;
     
     
 -- -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ drop table employee_2016;
 	alter table employee_stru
 		add constraint primary key(emp_id);
 	
-    desc employee_stru;
+	desc employee_stru;
     
 -- emp_id에 데이터 insert 작업 시 트리거가 실행되도록 생성
 -- ㄴ 'E0001' 형식으로 데이터 추가
@@ -280,7 +280,7 @@ select * from emp;
 -- ㄴ 부모의 참조 컬럼이 삭제되어도 자식의 행에 들어있던 값이 null값으로 업데이트 됨
 	select * from information_schema.triggers;
     
-    -- 트리거 생성 : dept 테이블의 row 삭제시(dept_id 컬럼 포함), 참조하는 emp 테이블의 dept_id에 null값 업데이트
+	-- 트리거 생성 : dept 테이블의 row 삭제시(dept_id 컬럼 포함), 참조하는 emp 테이블의 dept_id에 null값 업데이트
 		delimiter $$
 		
 		-- (1) create trigger [트리거명]
@@ -299,7 +299,7 @@ select * from emp;
     
 		select * from information_schema.triggers;
     
-    -- 부서 테이블 삭제
+	-- 부서 테이블 삭제
 		select * from dept;
 		select * from emp;
     
@@ -356,7 +356,7 @@ select * from emp;
 
 	이런 과정을 프로시저로 만들어 사용하면 실수 방지 및 일관성 유지에 도움
 
-	예시:
+	예시)
 
 	sql
 	DELIMITER $$
@@ -379,7 +379,7 @@ select * from emp;
 
 -- 사원 테이블의 급여 변경시 로그 저장 :: 트리거 업데이트 이용
     
-    -- 테이블 생성
+	-- 테이블 생성
 		create table salary_log(
 			emp_id          char(5)     primary key,
 			old_salary      int,
@@ -389,7 +389,7 @@ select * from emp;
 		
 		desc salary_log;
     
-    -- 트리거 생성 : dept 테이블의 row 삭제시(dept_id 컬럼 포함), 참조하는 emp 테이블의 dept_id에 null값 업데이트
+	-- 트리거 생성 : dept 테이블의 row 삭제시(dept_id 컬럼 포함), 참조하는 emp 테이블의 dept_id에 null값 업데이트
 		delimiter $$
 		
 		-- (1) create trigger [트리거명]
@@ -408,7 +408,7 @@ select * from emp;
     
 		select * from information_schema.triggers;
     
-    -- 변경 내역 확인
+	-- 변경 내역 확인
 		select * from salary_log;
 		
 		update employee set salary = 1000 where emp_id = 'S0020';
