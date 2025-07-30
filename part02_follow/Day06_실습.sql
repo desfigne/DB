@@ -103,19 +103,19 @@ select database();
     
 		delimiter $$
         
-        -- (1) create trigger [트리거명]
+		-- (1) create trigger [트리거명]
 			create trigger trg_member_mid
 			before insert on trg_member -- 테이블명 / 업데이트 등은 애프터로 들어감
 			for each row
 			begin
 			declare max_code int; -- 'M0001'
         
-        -- (2) 현재 저장된 값 중 가장 큰 값을 가져옴
+		-- (2) 현재 저장된 값 중 가장 큰 값을 가져옴
 			select ifnull(max(cast(right(mid, 4) as unsigned)), 0)
 			into max_code
 			from trg_member;
         
-        -- (3) 'M0001' 형식으로 아이디 생성, LPAD(값, 크기, 채워지는 문자형식) > M0001
+		-- (3) 'M0001' 형식으로 아이디 생성, LPAD(값, 크기, 채워지는 문자형식) > M0001
 			set new.mid = concat('M', lpad((max_code + 1), 4, '0'));
         
         end $$
