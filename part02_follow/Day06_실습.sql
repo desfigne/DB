@@ -128,9 +128,9 @@ select database();
 		from information_schema.triggers; -- 테이블이 변경되거나 더이상 사용되지 않을 경우 지워줘야 함
         
 	-- 트리거 실습 테이블 확인
-    select * from trg_member;
-    insert into trg_member(name, mdate)
-		values('홍길동', curdate());
+		select * from trg_member;
+		insert into trg_member(name, mdate)
+			values('홍길동', curdate());
         
 	-- 오류 발생시 아래 명렁어 사용
         
