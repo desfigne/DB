@@ -16,13 +16,47 @@ use hrdb2019;
 select database();
 show tables;
 desc member;
-select * from member;
 
-desc subject;
-desc student;
-select * from subject;
-select * from student;
+-- score_member 테이블 생성
+create table score_member(
+	mid 		char(5) 		primary key, -- 'M0001' 형식의 트리거 적용
+    name 		varchar(10) 	not null,
+    department 	varchar(20),
+    kor 		decimal(6, 2) 	default 0.0,
+    eng 		decimal(6, 2) 	default 0.0,
+    math 		decimal(6, 2) 	default 0.0,
+    mdate 		datetime
+);
+desc score_member;
+select * from score_member;
 
+-- 트리거 생성 : 여러개의 sql문 포함 ** 인서트가 실행 완료되기 전에 호출 : before
+    
+		delimiter $$
+        
+		-- (1) create trigger [트리거명]
+			create trigger trg_score_member_mid
+			before insert on score_member -- 테이블명 / 업데이트 등은 애프터로 들어감
+			for each row
+			begin
+			declare max_code int; -- 'M0001'
+        
+		-- (2) 현재 저장된 값 중 가장 큰 값을 가져옴
+			select ifnull(max(cast(right(mid, 4) as unsigned)), 0)
+			into max_code
+			from score_member;
+        
+		-- (3) 'M0001' 형식으로 아이디 생성, LPAD(값, 크기, 채워지는 문자형식) > M0001
+			set new.mid = concat('M', lpad((max_code + 1), 4, '0'));
+        
+		end $$
+		delimiter ;
+
+	-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        
+	-- 트리거 생성 확인
+		select *
+		from information_schema.triggers; -- 테이블이 변경되거나 더이상 사용되지 않을 경우 지워줘야 함
 
 
 
