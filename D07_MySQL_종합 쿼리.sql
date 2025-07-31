@@ -35,12 +35,6 @@ desc employee;
 desc department;
 select * from department;
 
---
-desc subject;
-desc student;
-select * from subject;
-select * from student;
-
 
 
 
