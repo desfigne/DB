@@ -33,23 +33,23 @@ show tables;
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 create table book_market_books(
-	bks_id                  char(8)			primary key, -- 트리거로 "ISBN1234" 형식 지정
-	bks_category            varchar(10)		not null,
-	bks_title               varchar(150)	not null,
-	bks_author              varchar(10)		not null,
-	bks_date                datetime 		not null,
+	bks_id                  char(8)         primary key, -- 트리거로 "ISBN1234" 형식 지정
+	bks_category            varchar(10)     not null,
+	bks_title               varchar(150)    not null,
+	bks_author              varchar(10)     not null,
+	bks_date                datetime        not null,
 	bks_price               int
 );
 
 create table book_market_member(
-	mbr_id                  varchar(8)		primary key,
-	mbr_name                varchar(10)		not null,
-	mbr_phone               varchar(20)		not null,
+	mbr_id                  varchar(8)      primary key,
+	mbr_name                varchar(10)     not null,
+	mbr_phone               varchar(20)     not null,
 	mbr_address             varchar(200)
 );
 
 create table book_market_cart(
-	crt_id                  char(8)			primary key,
+	crt_id                  char(8)         primary key,
 	crt_amount              int,
 	crt_price_each_total    int,
 	crt_bks_id              char(8),
@@ -72,13 +72,13 @@ CREATE TRIGGER trg_books_before_insert
 BEFORE INSERT ON book_market_books
 FOR EACH ROW
 BEGIN
-  DECLARE seq INT;
-  IF NEW.bks_id IS NULL OR NEW.bks_id = '' THEN
-    SELECT IFNULL(MAX(CAST(SUBSTRING(bks_id,5) AS UNSIGNED)),0) + 1
-      INTO seq
-      FROM book_market_books;
-    SET NEW.bks_id = CONCAT('ISBN', LPAD(seq,4,'0'));
-  END IF;
+	DECLARE seq INT;
+		IF NEW.bks_id IS NULL OR NEW.bks_id = '' THEN
+			SELECT IFNULL(MAX(CAST(SUBSTRING(bks_id,5) AS UNSIGNED)),0) + 1
+				INTO seq
+				FROM book_market_books;
+			SET NEW.bks_id = CONCAT('ISBN', LPAD(seq,4,'0'));
+		END IF;
 END$$
 DELIMITER ;
 
@@ -87,13 +87,13 @@ CREATE TRIGGER trg_member_before_insert
 BEFORE INSERT ON book_market_member
 FOR EACH ROW
 BEGIN
-  DECLARE seq INT;
-  IF NEW.mbr_id IS NULL OR NEW.mbr_id = '' THEN
-    SELECT IFNULL(MAX(CAST(SUBSTRING(mbr_id,4) AS UNSIGNED)),0) + 1
-      INTO seq
-      FROM book_market_member;
-    SET NEW.mbr_id = CONCAT('MBR', LPAD(seq,5,'0'));
-  END IF;
+	DECLARE seq INT;
+	IF NEW.mbr_id IS NULL OR NEW.mbr_id = '' THEN
+		SELECT IFNULL(MAX(CAST(SUBSTRING(mbr_id,4) AS UNSIGNED)),0) + 1
+			INTO seq
+			FROM book_market_member;
+		SET NEW.mbr_id = CONCAT('MBR', LPAD(seq,5,'0'));
+	END IF;
 END$$
 DELIMITER ;
 
@@ -102,13 +102,13 @@ CREATE TRIGGER trg_cart_before_insert
 BEFORE INSERT ON book_market_cart
 FOR EACH ROW
 BEGIN
-  DECLARE seq INT;
-  IF NEW.crt_id IS NULL OR NEW.crt_id = '' THEN
-    SELECT IFNULL(MAX(CAST(SUBSTRING(crt_id,4) AS UNSIGNED)),0) + 1
-      INTO seq
-      FROM book_market_cart;
-    SET NEW.crt_id = CONCAT('CRT', LPAD(seq,5,'0'));
-  END IF;
+	DECLARE seq INT;
+	IF NEW.crt_id IS NULL OR NEW.crt_id = '' THEN
+		SELECT IFNULL(MAX(CAST(SUBSTRING(crt_id,4) AS UNSIGNED)),0) + 1
+			INTO seq
+			FROM book_market_cart;
+		SET NEW.crt_id = CONCAT('CRT', LPAD(seq,5,'0'));
+	END IF;
 END$$
 DELIMITER ;
     
