@@ -63,6 +63,9 @@ create table book_market_cart(
 drop table book_market_cart;
 drop table book_market_member;
 drop table book_market_books;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
 
 DELIMITER $$
 CREATE TRIGGER trg_books_before_insert
@@ -108,6 +111,22 @@ BEGIN
   END IF;
 END$$
 DELIMITER ;
+    
+    
+-- -----------------------------------------------------------------------------------------------------------------------------------------------
+
+SELECT * FROM book_market_books;
+
+INSERT INTO book_market_books (bks_category, bks_title, bks_author, bks_date, bks_price)
+VALUES ('IT전문서', '쉽게 배우는 JSP 웹 프로그래밍', '송미영', NOW(), 27000);
+
+INSERT INTO book_market_books (bks_category, bks_title, bks_author, bks_date, bks_price)
+VALUES ('IT전문서', '안드로이드 프로그래밍', '우재남', NOW(), 33000);
+
+INSERT INTO book_market_books (bks_category, bks_title, bks_author, bks_date, bks_price)
+VALUES ('컴퓨터입문', '컴퓨팅 사고력을 키우는 블록 코딩', '고광일', NOW(), 33000);
+
+
 
 
 
