@@ -28,24 +28,24 @@ show tables;
 	ㄴ 고객 이름 (mbr_name) / 연락처 (mbr_phone) / 주소지 (mbr_address)
 
 	- 장바구니 테이블 (book_market_cart)
-    ㄴ 주문 아이디 (crt_id) / 주문 도서 아이디 (crt_bks_id) / 주문 회원 아이디 (crt_mbr_id) / 주문 도서 수량 (crt_amount) / 주문 도서별 총금액 (crt_each_total_price)
+	ㄴ 주문 아이디 (crt_id) / 주문 도서 아이디 (crt_bks_id) / 주문 회원 아이디 (crt_mbr_id) / 주문 도서 수량 (crt_amount) / 주문 도서별 총금액 (crt_each_total_price)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 create table book_market_books(
 	bks_id 					char(8)			primary key, -- 트리거로 "ISBN1234" 형식 지정
 	bks_category 			varchar(10)		not null,
-    bks_title 				varchar(150)	not null,
-    bks_author 				varchar(10)		not null,
-    bks_date 				datetime 		not null,
-    bks_price 				int
+	bks_title 				varchar(150)	not null,
+	bks_author 				varchar(10)		not null,
+	bks_date 				datetime 		not null,
+	bks_price 				int
 );
 
 create table book_market_member(
 	mbr_id 					varchar(8)		primary key,
 	mbr_name 				varchar(10)		not null,
 	mbr_phone 				varchar(20)		not null,
-	mbr_address 				varchar(200)
+	mbr_address 			varchar(200)
 );
 
 create table book_market_cart(
